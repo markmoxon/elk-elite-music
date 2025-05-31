@@ -1,0 +1,15 @@
+MODE 6
+CLS
+*LOAD DRIVER 3000
+
+T%=1
+REPEAT
+PRINT'"Init tune: ";T%
+IF T%=1 THEN CALL &3000 ELSE CALL &3003
+PRINT "Playing... press any key for next tune"
+REPEAT
+*FX19
+CALL &3006
+UNTIL INKEY(0)<>-1
+T%=T%+1:IF T%>2 THEN T%=1
+UNTIL FALSE
