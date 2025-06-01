@@ -15,6 +15,7 @@
     .EXO_zp_dest_lo	SKIP 1	; dest addr lo
     .EXO_zp_dest_bi	SKIP 1	; dest addr hi
 
+.speaker_values
     .speaker_on     SKIP 1
     .speaker_off    SKIP 1
     

@@ -46,13 +46,11 @@ exo_tabl_hi     = exo_tabl_bi + 104
 
     rts
 
-
 .DRIVER_PLAY
     jsr     exo_get_decrunched_byte
     bcs     endTrack
 
-    cmp     #$02                            ; 2
-
+    cmp     #$02
     ldx     speaker_off
     bcc     set_val
     ldx     speaker_on
