@@ -110,150 +110,165 @@ hm_length = <(huffmunch_zpblock + 8) ; bytes left in current string
 
 .huffmunch_read
 {
-	ldy #0
-	lda hm_length ; string bytes pending
-	beq string_empty
+    ldy #0
+    lda hm_length
+    beq string_empty
+
 .emit_byte
-	dec hm_length
-	lda (hm_node), Y
-	inc hm_node+0
-	bne l2
-	inc hm_node+1
-.l2
-	rts
+    dec hm_length
+    lda (hm_node),Y
+    inc hm_node+0
+    bne skip_hi1
+    inc hm_node+1
+.skip_hi1
+    rts
+
 .string_empty
-	; hm_length = 0
-	; Y = 0
-	bit hm_status
-	bpl walk_tree
-	; follow suffix
-	lda (hm_node), Y
-	clc
-	adc hm_tree+0
-	tax
-	iny
-	lda (hm_node), Y
-	adc hm_tree+1
-	sta hm_node+1
-	stx hm_node+0
-	dey ; ldy #0
-	lda (hm_node), Y
-	iny
-	cmp #2
-	beq leaf2
-	tax
-	lda hm_status
-	and #$7F ; clear high bit, no more suffix
-	sta hm_status
-	cpx #1
-	beq leaf1
-	; 0 is the only other valid value
-.leaf0
-	; hm_length = 0
-	; hm_status has high bit clear
-	; (next read will walk_tree)
-	; Y = 1
-	lda (hm_node), Y
-	rts
-.leaf1
-	; hm_status high bit is clear (no suffix)
-.leaf2
-	; hm_status high bit is set (suffix) if leaf2
-	; Y = 1
-	lda (hm_node), Y
-	sta hm_length ; length must be > 0
-	lda hm_node+0
-	clc
-	adc #2
-	sta hm_node+0
-	bcc l3
-	inc hm_node+1
-.l3
-	ldy #0
-	jmp emit_byte
-.walk_tree
-	; hm_length = 0
-	; Y = 0
-	lda hm_tree+0 ; return to head of tree
-	sta hm_node+0
-	lda hm_tree+1
-	sta hm_node+1
-.walk_node
-	; Y = 0
-	lda (hm_node), Y
-	cmp #3
-	bcs node3
-	iny
-	cmp #2
-	beq node2
-	cmp #1
-	beq node1
-.node0
-	; Y = 1
-	jmp leaf0
-node1 = leaf1
-.node2
-	; Y = 1
-	lda hm_status
-	ora #$80 ; set suffix flag
-	sta hm_status
-	jmp leaf2
-.node3
-	; Y = 0
-	tax ; x = 3-255
-	; read bit
-	lda hm_status
-	bne l4
-    lda #8
+    bit hm_status
+    bpl walk_tree
+
+    ; follow suffix
+    lda (hm_node),Y
+    clc
+    adc hm_tree+0
+    tax
+    iny
+    lda (hm_node),Y
+    adc hm_tree+1
+    sta hm_node+1
+    stx hm_node+0
+
+    ldy #0
+    lda (hm_node),Y
+    iny
+    cmp #2
+    beq leaf2
+    tax
+    lda hm_status
+    and #$7F
     sta hm_status
-    lda (hm_stream), Y
+    cpx #1
+    beq leaf1
+
+; leaf0
+    lda (hm_node),Y
+    rts
+
+.leaf1
+    lda (hm_node),Y
+    sta hm_length
+    lda hm_node+0
+    clc
+    adc #2
+    sta hm_node+0
+    bcc skip_hi2
+    inc hm_node+1
+.skip_hi2
+    ldy #0
+    jmp emit_byte
+
+.leaf2
+    lda (hm_node),Y
+    sta hm_length
+    lda hm_node+0
+    clc
+    adc #2
+    sta hm_node+0
+    bcc skip_hi3
+    inc hm_node+1
+.skip_hi3
+    lda hm_status
+    ora #$80
+    sta hm_status
+    ldy #0
+    jmp emit_byte
+
+.walk_tree
+    lda hm_tree+0
+    sta hm_node+0
+    lda hm_tree+1
+    sta hm_node+1
+
+.walk_node
+    lda (hm_node),Y
+    cmp #3
+    bcs node3
+    iny
+    cmp #2
+    beq node2
+    cmp #1
+    beq leaf1
+
+; node0
+    lda (hm_node),Y
+    rts
+
+.node2
+    lda hm_status
+    ora #$80
+    sta hm_status
+    jmp leaf2
+
+.node3
+    tax
+
+; read bit (optimized)
+    dec hm_status
+    bpl skip_bitload
+    lda #7
+    sta hm_status
+    ldy #0
+    lda (hm_stream),Y
     sta hm_byte
     inc hm_stream+0
-    bne l4
+    bne skip_bitload
     inc hm_stream+1
-.l4
-	dec hm_status
-	asl hm_byte ; big-endian bit order
-	bcs walk_right
+.skip_bitload
+    asl hm_byte
+    bcs walk_right
+
 .walk_left
-	cpx #255
-	beq walk_left_long
-	inc hm_node+0
-	bne l5
-	inc hm_node+1
-.l5
-	jmp walk_node
+    cpx #255
+    beq walk_left_long
+    inc hm_node+0
+    bne skip_hi4
+    inc hm_node+1
+.skip_hi4
+    jmp walk_node
+
 .walk_left_long
-	lda hm_node+0
-	clc
-	adc #3
-	sta hm_node+0
-	bcc l6
-	inc hm_node+1
-.l6
-	jmp walk_node
+    lda hm_node+0
+    clc
+    adc #3
+    sta hm_node+0
+    bcc skip_hi5
+    inc hm_node+1
+.skip_hi5
+    jmp walk_node
+
 .walk_right
-	cpx #255
-	beq walk_right_long
-	txa
-	clc
-	adc hm_node+0
-	sta hm_node+0
-	bcc l7
-	inc hm_node+1
-.l7
-	jmp walk_node
+    cpx #255
+    beq walk_right_long
+    txa
+    clc
+    adc hm_node+0
+    sta hm_node+0
+    bcc skip_hi6
+    inc hm_node+1
+.skip_hi6
+    jmp walk_node
+
 .walk_right_long
-	iny ; Y = 1
-	lda (hm_node), Y
-	clc
-	adc hm_node+0
-	tax
-	iny ; Y = 2
-	lda (hm_node), Y
-	adc hm_node+1
-	sta hm_node+1
-	stx hm_node+0
-	ldy #0
-	jmp walk_node
+    iny
+    lda (hm_node),Y
+    clc
+    adc hm_node+0
+    tax
+    iny
+    lda (hm_node),Y
+    adc hm_node+1
+    sta hm_node+1
+    stx hm_node+0
+    ldy #0
+    jmp walk_node
 }

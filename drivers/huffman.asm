@@ -25,38 +25,39 @@
     rts
 
 .DRIVER_PLAY
-    ldy     #0                      ; 2
-    jsr     huffmunch_read          ; 6
-    cmp     #$02                    ; 2
+    ldy     #0                          ; 2
+    jsr     huffmunch_read              ; 6
+    cmp     #$02                        ; 2
 
-    ldx     speaker_off             ; 3
-    bcc     skip_on                 ; 2/3
-    ldx     speaker_on              ; 3
+    ldx     speaker_off                 ; 3
+    bcc     skip_on                     ; 2/3
+    ldx     speaker_on                  ; 3
 .skip_on
-    nop                             ; 2 — balances 1-cycle difference
-    stx     SHEILA_MISC_CONTROL     ; 4
-    sta     SHEILA_COUNTER          ; 4
+    stx     SHEILA_MISC_CONTROL         ; 4
+    sta     SHEILA_COUNTER              ; 4
 
-    inc     byte_ptr+0              ; 5
-    bne     check_limit             ; 2/3
-    inc     byte_ptr+1              ; 5
+    ; 16-bit increment byte_ptr
+    inc     byte_ptr+0                  ; 5
+    bne     skip_hi                     ; 2/3
+    inc     byte_ptr+1                  ; 5
+.skip_hi
 
-.check_limit
-    lda     byte_ptr+0              ; 3
-    cmp     page_bytes+0            ; 3
-    bne     continue                ; 2/3
-    lda     byte_ptr+1              ; 3
-    cmp     page_bytes+1            ; 3
-    bne     continue                ; 2/3
+    ; Compare against page_bytes (16-bit)
+    lda     byte_ptr+0                  ; 3
+    cmp     page_bytes+0                ; 3
+    lda     byte_ptr+1                  ; 3
+    sbc     page_bytes+1                ; 3
+    bcc     continue                    ; 2/3
 
-    lda     track_start+0           ; 3
-    sta     huffmunch_zpblock+0     ; 3
-    lda     track_start+1           ; 3
-    sta     huffmunch_zpblock+1     ; 3
-    jmp     DRIVER_INIT             ; 3
+    ; If >=, reload track start
+    lda     track_start+0               ; 3
+    sta     huffmunch_zpblock+0         ; 3
+    lda     track_start+1               ; 3
+    sta     huffmunch_zpblock+1         ; 3
+    jmp     DRIVER_INIT                 ; 3
 
 .continue
-    rts                             ; 6
+    rts                                 ; 6
 
 .speaker_on     SKIP 1
 .speaker_off    SKIP 1
