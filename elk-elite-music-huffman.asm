@@ -3,12 +3,12 @@ SHEILA_COUNTER          = $fe06
 SHEILA_MISC_CONTROL     = $fe07
 
 GUARD &89
-ORG &83
+ORG &79
 
 .zp_start
-    .track_ptr          SKIP 2
     .track_start        SKIP 2
-    .track_end          SKIP 2
+
+    INCLUDE "lib/huffman.h.asm"
 .zp_end
 
 ORG &3000
@@ -24,16 +24,12 @@ jmp poll_track  ; &3006
 .init_tune1
 {
     lda #<tune_data1_start
-    sta track_ptr+0
     sta track_start+0
-    lda #>tune_data1_start
-    sta track_ptr+1
-    sta track_start+1
+    sta huffmunch_zpblock+0
 
-    lda #<tune_data1_end
-    sta track_end+0
-    lda #>tune_data1_end
-    sta track_end+1
+    lda #>tune_data1_start
+    sta track_start+1
+    sta huffmunch_zpblock+1
 
     jmp DRIVER_INIT
 }
@@ -41,16 +37,12 @@ jmp poll_track  ; &3006
 .init_tune2
 {
     lda #<tune_data2_start
-    sta track_ptr+0
     sta track_start+0
-    lda #>tune_data2_start
-    sta track_ptr+1
-    sta track_start+1
+    sta huffmunch_zpblock+0
 
-    lda #<tune_data2_end
-    sta track_end+0
-    lda #>tune_data2_end
-    sta track_end+1
+    lda #>tune_data2_start
+    sta track_start+1
+    sta huffmunch_zpblock+1
 
     jmp DRIVER_INIT
 }
@@ -60,16 +52,20 @@ jmp poll_track  ; &3006
     jmp DRIVER_PLAY
 }
 
-INCLUDE "drivers/uncompressed.asm"
+INCLUDE "lib/huffman.s.asm"
+INCLUDE "drivers/huffman.asm"
 
 .tune_data1_start
-INCBIN "music/00_Elite_Theme.bin"
+INCBIN "music/00_Elite_Theme.huf"
 .tune_data1_end
 
+PRINT "HUFFMAN"
+PRINT "-------"
+PRINT ""
 PRINT "      Tune 1 size is ",P%-tune_data1_start,"bytes"
 
 .tune_data2_start
-INCBIN "music/01_Blue_Danube.bin"
+INCBIN "music/01_Blue_Danube.huf"
 .tune_data2_end
 
 PRINT "      Tune 2 size is ",P%-tune_data2_start,"bytes"
@@ -81,6 +77,7 @@ PRINT "           Alignment lost ",(P%-H%),"bytes"
 .end
 
 PRINT "           Total size is ",(end-start),"bytes"
+PRINT ""
 
 ; save file for SWRAM.
 SAVE "DRIVER", start, end, start

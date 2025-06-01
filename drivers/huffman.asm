@@ -5,6 +5,17 @@
 	jmp     play
 
 .init
+    sei
+
+    ldx     #0
+	ldy     #0
+    stx     byte_ptr+0
+    stx     byte_ptr+1
+
+	jsr     huffmunch_load
+    stx     page_bytes+0
+	sty     page_bytes+1
+
 	lda     #$f2                                            ; Read RAM copy of location &FE07 (ULA SHEILA Misc. Control)
 	ldx     #0
 	ldy     #$ff
@@ -16,56 +27,44 @@
 	ora     #2                                              ; Switch on sound generation - 00000010
 	sta     speaker_on                                      ; Store previous FE07 value with sound generation enabled
     
+    cli
     rts
 
 .play
     ldy     #0                      ; 2
-    lda     (track_ptr),y           ; 5
+    jsr     huffmunch_read          ; (A set, C set/clear)
     cmp     #$02                    ; 2
 
-    ; Preload speaker_off value
-    ldx     speaker_off             ; 3
-    bcc     use_off                 ; 2/3
-
+    ldx     speaker_off             ; 3 preload both cases
+    bcc     skip_on                 ; 2/3
     ldx     speaker_on              ; 3
-.use_off
+.skip_on
     stx     SHEILA_MISC_CONTROL     ; 4
     stx     fe07_val                ; 3
 
     sta     SHEILA_COUNTER          ; 4
     sta     fe06_val                ; 3
 
-    ; Increment track_ptr (2-byte pointer increment — always 13 cycles)
-    inc     track_ptr               ; 5
-    bne     skip_hi_inc             ; 2/3
-    inc     track_ptr+1             ; 5
-.skip_hi_inc
+    inc     byte_ptr+0              ; 5
+    bne     check_limit             ; 2/3
+    inc     byte_ptr+1              ; 5
 
-    ; Compare track_ptr to track_end (fixed 17 cycles)
-    lda     track_ptr+1             ; 3
-    cmp     track_end+1             ; 3
-    bcc     done                    ; 2/3
-    bne     reset_ptr               ; 2/3
+.check_limit
+    lda     byte_ptr+0              ; 3
+    cmp     page_bytes+0            ; 3
+    bne     continue                ; 2/3
+    lda     byte_ptr+1              ; 3
+    cmp     page_bytes+1            ; 3
+    bne     continue                ; 2/3
 
-    lda     track_ptr               ; 3
-    cmp     track_end               ; 3
-    bcc     done                    ; 2/3
-
-.reset_ptr
-    lda     track_start             ; 3
-    sta     track_ptr               ; 3
+    ; If we get here, we're at the limit — reset
+    lda     track_start+0           ; 3
+    sta     huffmunch_zpblock+0     ; 3
     lda     track_start+1           ; 3
-    sta     track_ptr+1             ; 3
-    jmp     done_end                ; 3
+    sta     huffmunch_zpblock+1     ; 3
+    jmp     init                    ; 3
 
-.done
-    ; Equalise with reset_ptr path (4 bytes/9 cycles: 3+6)
-    nop                             ; 2
-    nop                             ; 2
-    nop                             ; 2
-    jmp     done_end                ; 3
-
-.done_end
+.continue
     rts                             ; 6
 
 .speaker_on     SKIP 1
