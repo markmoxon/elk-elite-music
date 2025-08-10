@@ -65,4 +65,4 @@ exo_tabl_hi     = exo_tabl_bi + 104
     ldy track_start+1
     jmp DRIVER_INIT
 
-INCLUDE "lib\exomizer.s.asm"
+INCLUDE "lib/exomizer.s.asm"

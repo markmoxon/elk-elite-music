@@ -1,0 +1,316 @@
+.zp_start
+.track_start
+     0079
+.huffmunch_zpblock
+     007B
+.page_bytes
+     0084
+.byte_ptr
+     0086
+.zp_end
+.start
+.jumptable
+     3000   4C 09 30   JMP &3009
+     3003   4C 18 30   JMP &3018
+     3006   4C 27 30   JMP &3027
+.init_tune1
+     3009   A2 E8      LDX #&E8
+     300B   86 79      STX &79
+     300D   86 7B      STX &7B
+     300F   A2 31      LDX #&31
+     3011   86 7A      STX &7A
+     3013   86 7C      STX &7C
+     3015   4C 8F 31   JMP &318F
+.init_tune2
+     3018   A2 B7      LDX #&B7
+     301A   86 79      STX &79
+     301C   86 7B      STX &7B
+     301E   A2 39      LDX #&39
+     3020   86 7A      STX &7A
+     3022   86 7C      STX &7C
+     3024   4C 8F 31   JMP &318F
+.poll_track
+     3027   4C B5 31   JMP &31B5
+.huffmunch_load
+     302A   84 7E      STY &7E
+     302C   8A         TXA
+     302D   0A         ASL A
+     302E   85 7D      STA &7D
+     3030   26 7E      ROL &7E
+     3032   A0 01      LDY #&01
+     3034   B1 7B      LDA (&7B),Y
+     3036   48         PHA
+     3037   85 82      STA &82
+     3039   88         DEY
+     303A   B1 7B      LDA (&7B),Y
+     303C   48         PHA
+     303D   0A         ASL A
+     303E   85 81      STA &81
+     3040   26 82      ROL &82
+     3042   A5 7C      LDA &7C
+     3044   48         PHA
+     3045   A5 7B      LDA &7B
+     3047   48         PHA
+     3048   18         CLC
+     3049   69 02      ADC #&02
+     304B   85 7B      STA &7B
+     304D   90 02      BCC &3051
+     304F   E6 7C      INC &7C
+.l1
+     3051   A5 7B      LDA &7B
+     3053   18         CLC
+     3054   65 81      ADC &81
+     3056   85 7F      STA &7F
+     3058   A5 7C      LDA &7C
+     305A   65 82      ADC &82
+     305C   85 80      STA &80
+     305E   A5 7F      LDA &7F
+     3060   18         CLC
+     3061   65 81      ADC &81
+     3063   85 7F      STA &7F
+     3065   A5 80      LDA &80
+     3067   65 82      ADC &82
+     3069   85 80      STA &80
+     306B   A5 7B      LDA &7B
+     306D   18         CLC
+     306E   65 7D      ADC &7D
+     3070   85 7B      STA &7B
+     3072   A5 7C      LDA &7C
+     3074   65 7E      ADC &7E
+     3076   85 7C      STA &7C
+     3078   68         PLA
+     3079   18         CLC
+     307A   71 7B      ADC (&7B),Y
+     307C   85 7D      STA &7D
+     307E   C8         INY
+     307F   68         PLA
+     3080   71 7B      ADC (&7B),Y
+     3082   85 7E      STA &7E
+     3084   A5 7B      LDA &7B
+     3086   18         CLC
+     3087   65 81      ADC &81
+     3089   85 7B      STA &7B
+     308B   A5 7C      LDA &7C
+     308D   65 82      ADC &82
+     308F   85 7C      STA &7C
+     3091   B1 7B      LDA (&7B),Y
+     3093   48         PHA
+     3094   88         DEY
+     3095   B1 7B      LDA (&7B),Y
+     3097   AA         TAX
+     3098   68         PLA
+     3099   A8         TAY
+     309A   68         PLA
+     309B   85 7B      STA &7B
+     309D   68         PLA
+     309E   85 7C      STA &7C
+     30A0   A9 00      LDA #&00
+     30A2   85 81      STA &81
+     30A4   85 82      STA &82
+     30A6   85 83      STA &83
+     30A8   60         RTS
+.huffmunch_read
+     30A9   A0 00      LDY #&00
+     30AB   A5 83      LDA &83
+     30AD   F0 0B      BEQ &30BA
+.emit_byte
+     30AF   C6 83      DEC &83
+     30B1   B1 7B      LDA (&7B),Y
+     30B3   E6 7B      INC &7B
+     30B5   D0 02      BNE &30B9
+     30B7   E6 7C      INC &7C
+.skip_hi1
+     30B9   60         RTS
+.string_empty
+     30BA   24 82      BIT &82
+     30BC   10 54      BPL &3112
+     30BE   B1 7B      LDA (&7B),Y
+     30C0   18         CLC
+     30C1   65 7F      ADC &7F
+     30C3   AA         TAX
+     30C4   C8         INY
+     30C5   B1 7B      LDA (&7B),Y
+     30C7   65 80      ADC &80
+     30C9   85 7C      STA &7C
+     30CB   86 7B      STX &7B
+     30CD   A0 00      LDY #&00
+     30CF   B1 7B      LDA (&7B),Y
+     30D1   C8         INY
+     30D2   C9 02      CMP #&02
+     30D4   F0 22      BEQ &30F8
+     30D6   AA         TAX
+     30D7   A5 82      LDA &82
+     30D9   29 7F      AND #&7F
+     30DB   85 82      STA &82
+     30DD   E0 01      CPX #&01
+     30DF   F0 03      BEQ &30E4
+     30E1   B1 7B      LDA (&7B),Y
+     30E3   60         RTS
+.leaf1
+     30E4   B1 7B      LDA (&7B),Y
+     30E6   85 83      STA &83
+     30E8   A5 7B      LDA &7B
+     30EA   18         CLC
+     30EB   69 02      ADC #&02
+     30ED   85 7B      STA &7B
+     30EF   90 02      BCC &30F3
+     30F1   E6 7C      INC &7C
+.skip_hi2
+     30F3   A0 00      LDY #&00
+     30F5   4C AF 30   JMP &30AF
+.leaf2
+     30F8   B1 7B      LDA (&7B),Y
+     30FA   85 83      STA &83
+     30FC   A5 7B      LDA &7B
+     30FE   18         CLC
+     30FF   69 02      ADC #&02
+     3101   85 7B      STA &7B
+     3103   90 02      BCC &3107
+     3105   E6 7C      INC &7C
+.skip_hi3
+     3107   A5 82      LDA &82
+     3109   09 80      ORA #&80
+     310B   85 82      STA &82
+     310D   A0 00      LDY #&00
+     310F   4C AF 30   JMP &30AF
+.walk_tree
+     3112   A5 7F      LDA &7F
+     3114   85 7B      STA &7B
+     3116   A5 80      LDA &80
+     3118   85 7C      STA &7C
+.walk_node
+     311A   B1 7B      LDA (&7B),Y
+     311C   C9 03      CMP #&03
+     311E   B0 15      BCS &3135
+     3120   C8         INY
+     3121   C9 02      CMP #&02
+     3123   F0 07      BEQ &312C
+     3125   C9 01      CMP #&01
+     3127   F0 BB      BEQ &30E4
+     3129   B1 7B      LDA (&7B),Y
+     312B   60         RTS
+.node2
+     312C   A5 82      LDA &82
+     312E   09 80      ORA #&80
+     3130   85 82      STA &82
+     3132   4C F8 30   JMP &30F8
+.node3
+     3135   AA         TAX
+     3136   C6 82      DEC &82
+     3138   10 10      BPL &314A
+     313A   A9 07      LDA #&07
+     313C   85 82      STA &82
+     313E   A0 00      LDY #&00
+     3140   B1 7D      LDA (&7D),Y
+     3142   85 81      STA &81
+     3144   E6 7D      INC &7D
+     3146   D0 02      BNE &314A
+     3148   E6 7E      INC &7E
+.skip_bitload
+     314A   06 81      ASL &81
+     314C   B0 1B      BCS &3169
+.walk_left
+     314E   E0 FF      CPX #&FF
+     3150   F0 09      BEQ &315B
+     3152   E6 7B      INC &7B
+     3154   D0 02      BNE &3158
+     3156   E6 7C      INC &7C
+.skip_hi4
+     3158   4C 1A 31   JMP &311A
+.walk_left_long
+     315B   A5 7B      LDA &7B
+     315D   18         CLC
+     315E   69 03      ADC #&03
+     3160   85 7B      STA &7B
+     3162   90 02      BCC &3166
+     3164   E6 7C      INC &7C
+.skip_hi5
+     3166   4C 1A 31   JMP &311A
+.walk_right
+     3169   E0 FF      CPX #&FF
+     316B   F0 0D      BEQ &317A
+     316D   8A         TXA
+     316E   18         CLC
+     316F   65 7B      ADC &7B
+     3171   85 7B      STA &7B
+     3173   90 02      BCC &3177
+     3175   E6 7C      INC &7C
+.skip_hi6
+     3177   4C 1A 31   JMP &311A
+.walk_right_long
+     317A   C8         INY
+     317B   B1 7B      LDA (&7B),Y
+     317D   18         CLC
+     317E   65 7B      ADC &7B
+     3180   AA         TAX
+     3181   C8         INY
+     3182   B1 7B      LDA (&7B),Y
+     3184   65 7C      ADC &7C
+     3186   85 7C      STA &7C
+     3188   86 7B      STX &7B
+     318A   A0 00      LDY #&00
+     318C   4C 1A 31   JMP &311A
+.DRIVER_INIT
+     318F   78         SEI
+     3190   A2 00      LDX #&00
+     3192   A0 00      LDY #&00
+     3194   86 86      STX &86
+     3196   86 87      STX &87
+     3198   20 2A 30   JSR &302A
+     319B   86 84      STX &84
+     319D   84 85      STY &85
+     319F   A9 F2      LDA #&F2
+     31A1   A2 00      LDX #&00
+     31A3   A0 FF      LDY #&FF
+     31A5   20 F4 FF   JSR &FFF4
+     31A8   8A         TXA
+     31A9   29 F8      AND #&F8
+     31AB   8D E7 31   STA &31E7
+     31AE   09 02      ORA #&02
+     31B0   8D E6 31   STA &31E6
+     31B3   58         CLI
+     31B4   60         RTS
+.DRIVER_PLAY
+     31B5   A0 00      LDY #&00
+     31B7   20 A9 30   JSR &30A9
+     31BA   C9 02      CMP #&02
+     31BC   AE E7 31   LDX &31E7
+     31BF   90 03      BCC &31C4
+     31C1   AE E6 31   LDX &31E6
+.skip_on
+     31C4   8E 07 FE   STX &FE07
+     31C7   8D 06 FE   STA &FE06
+     31CA   E6 86      INC &86
+     31CC   D0 02      BNE &31D0
+     31CE   E6 87      INC &87
+.skip_hi
+     31D0   A5 86      LDA &86
+     31D2   C5 84      CMP &84
+     31D4   A5 87      LDA &87
+     31D6   E5 85      SBC &85
+     31D8   90 0B      BCC &31E5
+     31DA   A5 79      LDA &79
+     31DC   85 7B      STA &7B
+     31DE   A5 7A      LDA &7A
+     31E0   85 7C      STA &7C
+     31E2   4C 8F 31   JMP &318F
+.continue
+     31E5   60         RTS
+.speaker_on
+     31E6
+.speaker_off
+     31E7
+.tune_data1_start
+.tune_data1_end
+HUFFMAN
+-------
+
+      Tune 1 size is 7CF bytes
+.tune_data2_start
+.tune_data2_end
+      Tune 2 size is A23 bytes
+           Alignment lost 26 bytes
+.end
+           Total size is 1400 bytes
+
+Saving file 'DRIVER'

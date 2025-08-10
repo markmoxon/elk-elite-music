@@ -1,0 +1,97 @@
+.zp_start
+.track_ptr
+     0083
+.track_start
+     0085
+.track_end
+     0087
+.zp_end
+.start
+.jumptable
+     3000   4C 09 30   JMP &3009
+     3003   4C 20 30   JMP &3020
+     3006   4C 37 30   JMP &3037
+.init_tune1
+     3009   A2 83      LDX #&83
+     300B   86 83      STX &83
+     300D   86 85      STX &85
+     300F   A2 30      LDX #&30
+     3011   86 84      STX &84
+     3013   86 86      STX &86
+     3015   A2 C5      LDX #&C5
+     3017   86 87      STX &87
+     3019   A2 3E      LDX #&3E
+     301B   86 88      STX &88
+     301D   4C 3A 30   JMP &303A
+.init_tune2
+     3020   A2 C5      LDX #&C5
+     3022   86 83      STX &83
+     3024   86 85      STX &85
+     3026   A2 3E      LDX #&3E
+     3028   86 84      STX &84
+     302A   86 86      STX &86
+     302C   A2 FA      LDX #&FA
+     302E   86 87      STX &87
+     3030   A2 52      LDX #&52
+     3032   86 88      STX &88
+     3034   4C 3A 30   JMP &303A
+.poll_track
+     3037   4C 4F 30   JMP &304F
+.DRIVER_INIT
+     303A   A9 F2      LDA #&F2
+     303C   A2 00      LDX #&00
+     303E   A0 FF      LDY #&FF
+     3040   20 F4 FF   JSR &FFF4
+     3043   8A         TXA
+     3044   29 F8      AND #&F8
+     3046   8D 82 30   STA &3082
+     3049   09 02      ORA #&02
+     304B   8D 81 30   STA &3081
+     304E   60         RTS
+.DRIVER_PLAY
+     304F   A0 00      LDY #&00
+     3051   B1 83      LDA (&83),Y
+     3053   C9 02      CMP #&02
+     3055   AE 82 30   LDX &3082
+     3058   90 03      BCC &305D
+     305A   AE 81 30   LDX &3081
+.skip_on
+     305D   EA         NOP
+     305E   8E 07 FE   STX &FE07
+     3061   8D 06 FE   STA &FE06
+     3064   E6 83      INC &83
+     3066   D0 02      BNE &306A
+     3068   E6 84      INC &84
+.skip_hi
+     306A   A5 84      LDA &84
+     306C   C5 88      CMP &88
+     306E   90 10      BCC &3080
+     3070   D0 06      BNE &3078
+     3072   A5 83      LDA &83
+     3074   C5 87      CMP &87
+     3076   90 08      BCC &3080
+.reset_ptr
+     3078   A5 85      LDA &85
+     307A   85 83      STA &83
+     307C   A5 86      LDA &86
+     307E   85 84      STA &84
+.done
+     3080   60         RTS
+.speaker_on
+     3081
+.speaker_off
+     3082
+.tune_data1_start
+.tune_data1_end
+UNCOMPRESSED
+------------
+
+      Tune 1 size is E42 bytes
+.tune_data2_start
+.tune_data2_end
+      Tune 2 size is 1435 bytes
+           Alignment lost 6 bytes
+.end
+           Total size is 2300 bytes
+
+Saving file 'DRIVER'

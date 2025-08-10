@@ -81,5 +81,5 @@ PRINT "           Total size is ",(end-start),"bytes"
 PRINT ""
 
 SAVE "DRIVER", start, end, start
-PUTFILE ".\BOOT","!BOOT",&FFFF
+PUTFILE "BOOT","!BOOT",&FFFF
 PUTBASIC "player.bas","PLAYER"

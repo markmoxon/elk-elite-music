@@ -1,0 +1,279 @@
+.zp_start
+.track_start
+     0079
+.driver_zp_start
+.EXO_zp_src_hi
+     007B
+.EXO_zp_src_lo
+     007C
+.EXO_zp_src_bi
+     007D
+.EXO_zp_bitbuf
+     007E
+.EXO_zp_len_lo
+     007F
+.EXO_zp_len_hi
+     0080
+.EXO_zp_bits_lo
+     0081
+.EXO_zp_bits_hi
+     0082
+.EXO_zp_dest_hi
+     0083
+.EXO_zp_dest_lo
+     0084
+.EXO_zp_dest_bi
+     0085
+.speaker_values
+.speaker_on
+     0086
+.speaker_off
+     0087
+.driver_zp_end
+.zp_end
+.start
+.jumptable
+     3000   4C 09 30   JMP &3009
+     3003   4C 14 30   JMP &3014
+     3006   4C 1F 30   JMP &301F
+.init_tune1
+     3009   A2 87      LDX #&87
+     300B   86 79      STX &79
+     300D   A0 31      LDY #&31
+     300F   84 7A      STY &7A
+     3011   4C 22 30   JMP &3022
+.init_tune2
+     3014   A2 07      LDX #&07
+     3016   86 79      STX &79
+     3018   A0 36      LDY #&36
+     301A   84 7A      STY &7A
+     301C   4C 22 30   JMP &3022
+.poll_track
+     301F   4C 38 30   JMP &3038
+.DRIVER_INIT
+     3022   20 78 30   JSR &3078
+     3025   A9 F2      LDA #&F2
+     3027   A2 00      LDX #&00
+     3029   A0 FF      LDY #&FF
+     302B   20 F4 FF   JSR &FFF4
+     302E   8A         TXA
+     302F   29 F8      AND #&F8
+     3031   85 87      STA &87
+     3033   09 02      ORA #&02
+     3035   85 86      STA &86
+     3037   60         RTS
+.DRIVER_PLAY
+     3038   20 BD 30   JSR &30BD
+     303B   B0 0F      BCS &304C
+     303D   C9 02      CMP #&02
+     303F   A6 87      LDX &87
+     3041   90 02      BCC &3045
+     3043   A6 86      LDX &86
+.set_val
+     3045   8E 07 FE   STX &FE07
+     3048   8D 06 FE   STA &FE06
+     304B   60         RTS
+.endTrack
+     304C   A6 79      LDX &79
+     304E   A4 7A      LDY &7A
+     3050   4C 22 30   JMP &3022
+.exo_unpack
+     3053   8E 5F 30   STX &305F
+     3056   8C 60 30   STY &3060
+.next_chr
+     3059   20 BD 30   JSR &30BD
+     305C   B0 0D      BCS &306B
+.write_chr
+     305E   8D FF FF   STA &FFFF
+     3061   EE 5F 30   INC &305F
+     3064   D0 F3      BNE &3059
+     3066   EE 60 30   INC &3060
+     3069   D0 EE      BNE &3059
+.all_done
+     306B   60         RTS
+.exo_get_crunched_byte
+._byte
+     306C   AD FF FF   LDA &FFFF
+     306F   EE 6D 30   INC &306D
+     3072   D0 03      BNE &3077
+     3074   EE 6E 30   INC &306E
+._byte_skip_hi
+     3077   60         RTS
+.exo_init_decruncher
+     3078   8E 6D 30   STX &306D
+     307B   8C 6E 30   STY &306E
+     307E   20 6C 30   JSR &306C
+     3081   85 7E      STA &7E
+     3083   A2 00      LDX #&00
+     3085   86 84      STX &84
+     3087   86 83      STX &83
+     3089   86 7F      STX &7F
+     308B   86 80      STX &80
+     308D   A0 00      LDY #&00
+._init_nextone
+     308F   E8         INX
+     3090   98         TYA
+     3091   29 0F      AND #&0F
+     3093   F0 13      BEQ &30A8
+     3095   8A         TXA
+     3096   4A         LSR A
+     3097   A6 81      LDX &81
+._init_rolle
+     3099   2A         ROL A
+     309A   26 82      ROL &82
+     309C   CA         DEX
+     309D   10 FA      BPL &3099
+     309F   79 D7 03   ADC &03D7,Y
+     30A2   AA         TAX
+     30A3   A5 82      LDA &82
+     30A5   79 0B 04   ADC &040B,Y
+._init_shortcut
+     30A8   99 0C 04   STA &040C,Y
+     30AB   8A         TXA
+     30AC   99 D8 03   STA &03D8,Y
+     30AF   A2 04      LDX #&04
+     30B1   20 68 31   JSR &3168
+     30B4   99 A4 03   STA &03A4,Y
+     30B7   C8         INY
+     30B8   C0 34      CPY #&34
+     30BA   D0 D3      BNE &308F
+._do_exit
+     30BC   60         RTS
+.exo_get_decrunched_byte
+     30BD   A4 7F      LDY &7F
+     30BF   D0 64      BNE &3125
+     30C1   A6 80      LDX &80
+     30C3   D0 62      BNE &3127
+     30C5   20 67 31   JSR &3167
+     30C8   F0 05      BEQ &30CF
+     30CA   20 6C 30   JSR &306C
+     30CD   90 78      BCC &3147
+._get_sequence
+._seq_next1
+     30CF   C8         INY
+     30D0   20 67 31   JSR &3167
+     30D3   F0 FA      BEQ &30CF
+     30D5   C0 11      CPY #&11
+     30D7   B0 E3      BCS &30BC
+     30D9   BE A3 03   LDX &03A3,Y
+     30DC   20 68 31   JSR &3168
+     30DF   79 D7 03   ADC &03D7,Y
+     30E2   85 7F      STA &7F
+     30E4   A5 82      LDA &82
+     30E6   79 0B 04   ADC &040B,Y
+     30E9   85 80      STA &80
+     30EB   D0 06      BNE &30F3
+     30ED   A4 7F      LDY &7F
+     30EF   C0 04      CPY #&04
+     30F1   90 02      BCC &30F5
+._seq_nots123
+     30F3   A0 03      LDY #&03
+._seq_size123
+     30F5   BE 60 31   LDX &3160,Y
+     30F8   20 68 31   JSR &3168
+     30FB   79 63 31   ADC &3163,Y
+     30FE   A8         TAY
+     30FF   BE A4 03   LDX &03A4,Y
+     3102   20 68 31   JSR &3168
+     3105   79 D8 03   ADC &03D8,Y
+     3108   90 03      BCC &310D
+     310A   E6 82      INC &82
+     310C   18         CLC
+._seq_skipcarry
+     310D   65 84      ADC &84
+     310F   85 7C      STA &7C
+     3111   A5 82      LDA &82
+     3113   79 0C 04   ADC &040C,Y
+     3116   65 83      ADC &83
+     3118   C9 04      CMP #&04
+     311A   90 03      BCC &311F
+     311C   E9 04      SBC #&04
+     311E   18         CLC
+._seq_offset_ok
+     311F   85 7B      STA &7B
+     3121   69 50      ADC #&50
+     3123   85 7D      STA &7D
+._do_sequence
+     3125   A0 00      LDY #&00
+._do_sequence2
+     3127   A6 7F      LDX &7F
+     3129   D0 02      BNE &312D
+     312B   C6 80      DEC &80
+._seq_len_dec_lo
+     312D   C6 7F      DEC &7F
+     312F   A6 7C      LDX &7C
+     3131   D0 10      BNE &3143
+     3133   A6 7B      LDX &7B
+     3135   D0 08      BNE &313F
+     3137   A2 04      LDX #&04
+     3139   86 7B      STX &7B
+     313B   A2 54      LDX #&54
+     313D   86 7D      STX &7D
+._seq_src_dec_hi
+     313F   C6 7B      DEC &7B
+     3141   C6 7D      DEC &7D
+._seq_src_dec_lo
+     3143   C6 7C      DEC &7C
+     3145   B1 7C      LDA (&7C),Y
+._do_literal
+     3147   A6 84      LDX &84
+     3149   D0 10      BNE &315B
+     314B   A6 83      LDX &83
+     314D   D0 08      BNE &3157
+     314F   A2 04      LDX #&04
+     3151   86 83      STX &83
+     3153   A2 54      LDX #&54
+     3155   86 85      STX &85
+._seq_dest_dec_hi
+     3157   C6 83      DEC &83
+     3159   C6 85      DEC &85
+._seq_dest_dec_lo
+     315B   C6 84      DEC &84
+     315D   91 84      STA (&84),Y
+     315F   18         CLC
+     3160   60         RTS
+.exo_tabl_bit
+     3161   02
+     3162   04
+     3163   04
+.exo_tabl_off
+     3164   30
+     3165   20
+     3166   10
+.exo_bit_get_bit1
+     3167   E8         INX
+.exo_bit_get_bits
+     3168   A9 00      LDA #&00
+     316A   85 81      STA &81
+     316C   85 82      STA &82
+     316E   E0 01      CPX #&01
+     3170   90 14      BCC &3186
+     3172   A5 7E      LDA &7E
+._bit_bits_next
+     3174   4A         LSR A
+     3175   D0 04      BNE &317B
+     3177   20 6C 30   JSR &306C
+     317A   6A         ROR A
+._bit_ok
+     317B   26 81      ROL &81
+     317D   26 82      ROL &82
+     317F   CA         DEX
+     3180   D0 F2      BNE &3174
+     3182   85 7E      STA &7E
+     3184   A5 81      LDA &81
+._bit_bits_done
+     3186   60         RTS
+.tune_data1_start
+.tune_data1_end
+EXOMIZER
+--------
+
+      Tune 1 size is 1152 bytes
+.tune_data2_start
+.tune_data2_end
+      Tune 2 size is 1582 bytes
+           Alignment lost 203 bytes
+.end
+           Total size is 3328 bytes
+
+Saving file 'DRIVER'
