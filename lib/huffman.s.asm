@@ -4,10 +4,17 @@
 
 hm_node   = <(huffmunch_zpblock + 0) ; pointer to current node of tree
 hm_stream = <(huffmunch_zpblock + 2) ; pointer to bitstream
-hm_tree   = <(huffmunch_zpblock + 4) ; pointer to tree base
-hm_byte   = <(huffmunch_zpblock + 6) ; current byte of bitstream
-hm_status = <(huffmunch_zpblock + 7) ; bits 0-2 = bits left in hm_byte, bit 7 = string with suffix
-hm_length = <(huffmunch_zpblock + 8) ; bytes left in current string
+
+; MM - move variables out of zero page so zp requirement is only four bytes
+
+;hm_tree   = <(huffmunch_zpblock + 4) ; pointer to tree base
+;hm_byte   = <(huffmunch_zpblock + 6) ; current byte of bitstream
+;hm_status = <(huffmunch_zpblock + 7) ; bits 0-2 = bits left in hm_byte, bit 7 = string with suffix
+;hm_length = <(huffmunch_zpblock + 8) ; bytes left in current string
+hm_tree   = (huffmunch_block + 0) ; pointer to tree base
+hm_byte   = (huffmunch_block + 2) ; current byte of bitstream
+hm_status = (huffmunch_block + 3) ; bits 0-2 = bits left in hm_byte, bit 7 = string with suffix
+hm_length = (huffmunch_block + 4) ; bytes left in current string
 
 ; NOTE: only hm_node and hm_stream need to be on ZP
 ;       the rest could go elsewhere, but still recommended for ZP

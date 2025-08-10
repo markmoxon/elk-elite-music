@@ -2,16 +2,26 @@ OSBYTE                  = $FFF4
 SHEILA_COUNTER          = $FE06
 SHEILA_MISC_CONTROL     = $FE07
 
-GUARD &89
-ORG &79
+;GUARD &89
+;ORG &79
+;
+;.zp_start
+;    .track_start            SKIP 2
+;    INCLUDE "lib/huffman.h.asm"
+;.zp_end
+;
+;ORG &3000
+;GUARD &6000
+
+;ORG &0000  ; Use this for Electron Elite
+ORG &70     ; USE FOR BASIC player.bas ONLY!
 
 .zp_start
-    .track_start            SKIP 2
-    INCLUDE "lib/huffman.h.asm"
+.huffmunch_zpblock  SKIP 4      ; Share with four-byte RAND
 .zp_end
 
-ORG &3000
-GUARD &6000
+ORG &0E00       ; MM - assemble music and driver at start of
+GUARD &1D00     ;      available memory in Electron
 
 .start
 
@@ -45,6 +55,13 @@ GUARD &6000
 .poll_track
     jmp DRIVER_PLAY
 
+; MM - move non-zp variables here
+
+.huffmunch_block    SKIP 5
+.page_bytes         SKIP 2
+.byte_ptr           SKIP 2
+.track_start        SKIP 2
+
 INCLUDE "lib/huffman.s.asm"
 INCLUDE "drivers/huffman.asm"
 
@@ -58,7 +75,7 @@ PRINT ""
 PRINT "      Tune 1 size is ",P%-tune_data1_start,"bytes"
 
 .tune_data2_start
-    INCBIN "music/01_Blue_Danube.huf"
+\    INCBIN "music/01_Blue_Danube.huf"
 .tune_data2_end
 
 PRINT "      Tune 2 size is ",P%-tune_data2_start,"bytes"
@@ -71,6 +88,8 @@ PRINT "           Alignment lost ",(P%-H%),"bytes"
 
 PRINT "           Total size is ",(end-start),"bytes"
 PRINT ""
+
+PRINT "Code ends at ", ~end
 
 SAVE "DRIVER", start, end, start
 PUTFILE "BOOT","!BOOT",&FFFF
