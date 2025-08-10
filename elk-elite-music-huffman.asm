@@ -27,7 +27,7 @@ GUARD &1D00     ;      available memory in Electron
 
 .jumptable
     jmp init_tune1      ; &3000
-    jmp init_tune2      ; &3003
+;    jmp init_tune2      ; &3003
     jmp poll_track      ; &3006
 
 .init_tune1
@@ -41,16 +41,16 @@ GUARD &1D00     ;      available memory in Electron
 
     jmp DRIVER_INIT
 
-.init_tune2
-    ldx #<tune_data2_start
-    stx track_start
-    stx huffmunch_zpblock
-
-    ldx #>tune_data2_start
-    stx track_start+1
-    stx huffmunch_zpblock+1
-
-    jmp DRIVER_INIT
+;.init_tune2
+;    ldx #<tune_data2_start
+;    stx track_start
+;    stx huffmunch_zpblock
+;
+;    ldx #>tune_data2_start
+;    stx track_start+1
+;    stx huffmunch_zpblock+1
+;
+;    jmp DRIVER_INIT
 
 .poll_track
     jmp DRIVER_PLAY
@@ -66,7 +66,13 @@ INCLUDE "lib/huffman.s.asm"
 INCLUDE "drivers/huffman.asm"
 
 .tune_data1_start
-    INCBIN "music/00_Elite_Theme.huf"
+
+IF tune = 1
+  INCBIN "music/00_Elite_Theme.huf"
+ELSE
+  INCBIN "music/01_Blue_Danube.huf"
+ENDIF
+
 .tune_data1_end
 
 PRINT "HUFFMAN"
@@ -74,11 +80,11 @@ PRINT "-------"
 PRINT ""
 PRINT "      Tune 1 size is ",P%-tune_data1_start,"bytes"
 
-.tune_data2_start
-\    INCBIN "music/01_Blue_Danube.huf"
-.tune_data2_end
-
-PRINT "      Tune 2 size is ",P%-tune_data2_start,"bytes"
+;.tune_data2_start
+;    INCBIN "music/01_Blue_Danube.huf"
+;.tune_data2_end
+;
+;PRINT "      Tune 2 size is ",P%-tune_data2_start,"bytes"
 
 H%=P%
 ALIGN 256
@@ -91,6 +97,8 @@ PRINT ""
 
 PRINT "Code ends at ", ~end
 
-SAVE "DRIVER", start, end, start
-PUTFILE "BOOT","!BOOT",&FFFF
-PUTBASIC "player.bas","PLAYER"
+IF tune = 1
+ SAVE "MUSIC1", start, end, start
+ELSE
+ SAVE "MUSIC2", start, end, start
+ENDIF
