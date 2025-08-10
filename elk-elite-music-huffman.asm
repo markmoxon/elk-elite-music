@@ -31,6 +31,8 @@ GUARD &1D00     ;      available memory in Electron
     jmp poll_track      ; &3006
 
 .init_tune1
+    jsr save_zp             ; MM - preserve zero page &0000 to &0004
+
     ldx #<tune_data1_start
     stx track_start
     stx huffmunch_zpblock
@@ -39,7 +41,10 @@ GUARD &1D00     ;      available memory in Electron
     stx track_start+1
     stx huffmunch_zpblock+1
 
-    jmp DRIVER_INIT
+;   jmp DRIVER_INIT
+
+    jsr DRIVER_INIT
+    jmp load_zp             ; MM - preserve zero page &0000 to &0004
 
 ;.init_tune2
 ;    ldx #<tune_data2_start
@@ -53,7 +58,11 @@ GUARD &1D00     ;      available memory in Electron
 ;    jmp DRIVER_INIT
 
 .poll_track
-    jmp DRIVER_PLAY
+;   jmp DRIVER_PLAY
+
+    jsr save_zp             ; MM - preserve zero page &0000 to &0004
+    jsr DRIVER_PLAY
+    jmp load_zp
 
 ; MM - move non-zp variables here
 
@@ -62,10 +71,40 @@ GUARD &1D00     ;      available memory in Electron
 .byte_ptr           SKIP 2
 .track_start        SKIP 2
 
+; MM - Add storage for original contents of RAND
+
+.zp_temp            SKIP 4
+
+.save_zp
+
+ LDA &0000
+ STA zp_temp
+ LDA &0001
+ STA zp_temp+1
+ LDA &0002
+ STA zp_temp+2
+ LDA &0003
+ STA zp_temp+3
+ RTS
+
+.load_zp
+
+ LDA zp_temp
+ STA &0000
+ LDA zp_temp+1
+ STA &0001
+ LDA zp_temp+2
+ STA &0002
+ LDA zp_temp+3
+ STA &0003
+ RTS
+
 INCLUDE "lib/huffman.s.asm"
 INCLUDE "drivers/huffman.asm"
 
 .tune_data1_start
+
+; MM - only load one tune
 
 IF tune = 1
   INCBIN "music/00_Elite_Theme.huf"
