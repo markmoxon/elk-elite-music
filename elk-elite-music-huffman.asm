@@ -39,7 +39,8 @@ SHEILA_MISC_CONTROL     = $FE07
 .xsav               SKIP 1
 .ysav               SKIP 1
 .zp_temp            SKIP 4
-
+.speaker_on     SKIP 1
+.speaker_off    SKIP 1
 
 ORG &0E00       ; MM - assemble music and driver at start of
 GUARD &1C00     ;      available memory in Electron
@@ -53,11 +54,10 @@ GUARD &1C00     ;      available memory in Electron
 
     jmp init_tune1      ; &0E00     ; MM - new jump table
     jmp poll_track      ; &0E03
-    jmp LoadMusic1      ; &0E06
-    jmp LoadMusic2      ; &0E09
-    jmp StopMusic       ; &0E0C
-    jmp StartMusic      ; &0E0F
-    jmp LoadPlayMusic1  ; &0E12
+    jmp StopMusic       ; &0E06
+    jmp StartMusic      ; &0E09
+    jmp LoadPlayMusic1  ; &0E0C
+    jmp LoadInitMusic2  ; &0E0F
 
 .init_tune1
     jsr swap_zp             ; MM - preserve zero page &0000 to &0004
@@ -128,8 +128,6 @@ GUARD &1C00     ;      available memory in Electron
 
 .LoadMusic1
 
- JSR StopMusic          \ Stop any music from playing
-
  LDX #LO(MUSIC1)        \ Set (Y X) to point to the OS command at MUSIC1, which
  LDY #HI(MUSIC1)        \ loads the Elite Theme music file
 
@@ -144,8 +142,6 @@ GUARD &1C00     ;      available memory in Electron
 
 .LoadMusic2
 
- JSR StopMusic          \ Stop any music from playing
-
  LDX #LO(MUSIC2)        \ Set (Y X) to point to the OS command at MUSIC2, which
  LDY #HI(MUSIC2)        \ loads the Blue Danube music file
 
@@ -155,13 +151,20 @@ GUARD &1C00     ;      available memory in Electron
 
 .MUSIC2
 
- EQUS "L.M.MUSIC2"      \ This is short for "*LOAD M.MUSIC2"
+ EQUS "L.M.MUSIC2"      \ This is short for "*LOAD MUSIC2"
  EQUB 13
 
 .StopMusic
 
  LDA #0                 \ Stop any music from playing
  STA musicStatus
+
+ LDX speaker_off        \ Disable the speaker
+ STX SHEILA_MISC_CONTROL
+
+ LDA #15                \ Flush the sound buffers
+ LDX #0
+ JSR OSBYTE
 
  RTS                    \ Return from the subroutrine
 
@@ -181,6 +184,15 @@ GUARD &1C00     ;      available memory in Electron
  JSR StartMusic         \ Start the music playing
 
  RTS                    \ Return from the subroutrine
+
+.LoadInitMusic2
+
+ JSR LoadMusic2         \ Load the Blue Danube music file
+
+ JSR init_tune1         \ Initialise the music
+
+ RTS                    \ Return from the subroutrine
+
 
 INCLUDE "lib/huffman.s.asm"
 INCLUDE "drivers/huffman.asm"

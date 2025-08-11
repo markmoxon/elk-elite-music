@@ -59,5 +59,5 @@
 .continue
     rts                                 ; 6
 
-.speaker_on     SKIP 1
-.speaker_off    SKIP 1
+;.speaker_on     SKIP 1
+;.speaker_off    SKIP 1
