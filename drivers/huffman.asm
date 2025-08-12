@@ -50,11 +50,31 @@
     bcc     continue                    ; 2/3
 
     ; If >=, reload track start
+
+ LDA #0                 \ Stop any music from playing
+ STA musicStatus
+ LDA speaker_off        \ Disable the speaker
+ STA SHEILA_MISC_CONTROL
+
     lda     track_start+0               ; 3
     sta     huffmunch_zpblock+0         ; 3
     lda     track_start+1               ; 3
     sta     huffmunch_zpblock+1         ; 3
-    jmp     DRIVER_INIT                 ; 3
+
+sei
+    ldx     #0
+	ldy     #0
+    stx     byte_ptr+0
+    stx     byte_ptr+1
+	jsr     huffmunch_load
+    stx     page_bytes+0
+	sty     page_bytes+1
+cli
+
+ LDA #&FF                \ Start the music playing again
+ STA musicStatus
+
+\    jmp     DRIVER_INIT                 ; 3
 
 .continue
     rts                                 ; 6

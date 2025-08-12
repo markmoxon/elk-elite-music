@@ -40,7 +40,7 @@
      0E18   01
 .InitialiseMusic
      0E19   20 52 0E   JSR &0E52
-     0E1C   A2 3D      LDX #&3D
+     0E1C   A2 5F      LDX #&5F
      0E1E   8E 0B 1C   STX &1C0B
      0E21   86 70      STX &70
      0E23   A2 11      LDX #&11
@@ -444,21 +444,35 @@
      1124   CD 07 1C   CMP &1C07
      1127   AD 0A 1C   LDA &1C0A
      112A   ED 08 1C   SBC &1C08
-     112D   90 0D      BCC &113C
-     112F   AD 0B 1C   LDA &1C0B
-     1132   85 70      STA &70
-     1134   AD 0C 1C   LDA &1C0C
-     1137   85 71      STA &71
-     1139   4C DA 10   JMP &10DA
+     112D   90 2F      BCC &115E
+     112F   A9 00      LDA #&00
+     1131   8D 00 1C   STA &1C00
+     1134   AD 15 1C   LDA &1C15
+     1137   8D 07 FE   STA &FE07
+     113A   AD 0B 1C   LDA &1C0B
+     113D   85 70      STA &70
+     113F   AD 0C 1C   LDA &1C0C
+     1142   85 71      STA &71
+     1144   78         SEI
+     1145   A2 00      LDX #&00
+     1147   A0 00      LDY #&00
+     1149   8E 09 1C   STX &1C09
+     114C   8E 0A 1C   STX &1C0A
+     114F   20 50 0F   JSR &0F50
+     1152   8E 07 1C   STX &1C07
+     1155   8C 08 1C   STY &1C08
+     1158   58         CLI
+     1159   A9 FF      LDA #&FF
+     115B   8D 00 1C   STA &1C00
 .continue
-     113C   60         RTS
+     115E   60         RTS
 .tune_data1_start
 .tune_data1_end
 Tune 1  size is 1999 bytes
 .end
-Total size is 2828 bytes
+Total size is 2862 bytes
 
-Code ends at &190C 
+Code ends at &192E 
 Saving file 'output/ssd/MUSIC1'
 .zp_start
 .huffmunch_zpblock
@@ -502,7 +516,7 @@ Saving file 'output/ssd/MUSIC1'
      0E18   02
 .InitialiseMusic
      0E19   20 52 0E   JSR &0E52
-     0E1C   A2 3D      LDX #&3D
+     0E1C   A2 5F      LDX #&5F
      0E1E   8E 0B 1C   STX &1C0B
      0E21   86 70      STX &70
      0E23   A2 11      LDX #&11
@@ -906,19 +920,33 @@ Saving file 'output/ssd/MUSIC1'
      1124   CD 07 1C   CMP &1C07
      1127   AD 0A 1C   LDA &1C0A
      112A   ED 08 1C   SBC &1C08
-     112D   90 0D      BCC &113C
-     112F   AD 0B 1C   LDA &1C0B
-     1132   85 70      STA &70
-     1134   AD 0C 1C   LDA &1C0C
-     1137   85 71      STA &71
-     1139   4C DA 10   JMP &10DA
+     112D   90 2F      BCC &115E
+     112F   A9 00      LDA #&00
+     1131   8D 00 1C   STA &1C00
+     1134   AD 15 1C   LDA &1C15
+     1137   8D 07 FE   STA &FE07
+     113A   AD 0B 1C   LDA &1C0B
+     113D   85 70      STA &70
+     113F   AD 0C 1C   LDA &1C0C
+     1142   85 71      STA &71
+     1144   78         SEI
+     1145   A2 00      LDX #&00
+     1147   A0 00      LDY #&00
+     1149   8E 09 1C   STX &1C09
+     114C   8E 0A 1C   STX &1C0A
+     114F   20 50 0F   JSR &0F50
+     1152   8E 07 1C   STX &1C07
+     1155   8C 08 1C   STY &1C08
+     1158   58         CLI
+     1159   A9 FF      LDA #&FF
+     115B   8D 00 1C   STA &1C00
 .continue
-     113C   60         RTS
+     115E   60         RTS
 .tune_data1_start
 .tune_data1_end
 Tune 2  size is 2595 bytes
 .end
-Total size is 3424 bytes
+Total size is 3458 bytes
 
-Code ends at &1B60 
+Code ends at &1B82 
 Saving file 'output/ssd/MUSIC2'
