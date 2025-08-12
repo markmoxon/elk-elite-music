@@ -8,8 +8,11 @@ DNOIZ = &1D1E
 BELL = &209C
 DELAY = &2504
 
- ORG &0000              \ Use this for Electron Elite
-;ORG &0070              \ USE FOR testing with BASIC player.bas
+IF ssd = 1
+ ORG &0070              \ For testing with BASIC player.bas on a SSD
+ELSE
+ ORG &0000              \ For Electron Elite
+ENDIF
 
 .zp_start
 .huffmunch_zpblock  SKIP 4      \ Share with four-byte variable RAND at &0000
@@ -369,7 +372,15 @@ PRINT ""
 PRINT "Code ends at ", ~end
 
 IF tune = 1
- SAVE "MUSIC1", start, end, start
+ IF ssd = 1
+  SAVE "output/ssd/MUSIC1", start, end, start
+ ELSE
+  SAVE "output/elite/MUSIC1", start, end, start
+ ENDIF
 ELSE
- SAVE "MUSIC2", start, end, start
+ IF ssd = 1
+  SAVE "output/ssd/MUSIC2", start, end, start
+ ELSE
+  SAVE "output/elite/MUSIC2", start, end, start
+ ENDIF
 ENDIF
