@@ -58,6 +58,8 @@ GUARD &1C00     ;      available memory in Electron
     jmp StartMusic      ; &0E09
     jmp LoadPlayMusic1  ; &0E0C
     jmp LoadInitMusic2  ; &0E0F
+    jmp ProcessOptions1 ; &0E12
+    jmp ProcessOptions2 ; &0E15
 
 .init_tune1
     jsr swap_zp             ; MM - preserve zero page &0000 to &0004
@@ -193,6 +195,33 @@ GUARD &1C00     ;      available memory in Electron
 
  RTS                    \ Return from the subroutrine
 
+.ProcessOptions1
+
+ CPX #&51               \ If "S" is not being pressed, skip to DK6
+ BNE DK6
+
+ LDA #0                 \ "S" is being pressed, so set DNOIZ to 0 to turn the
+ STA DNOIZ              \ sound on
+
+.DK6
+
+ RTS                    \ Return from the subroutrine
+
+.ProcessOptions2
+
+ CPX #&10               \ If "Q" is not being pressed, skip to DK7
+ BNE DK7
+
+ LDA #&FF               \ "Q" is being pressed, so set DNOIZ to &FF, so this
+ STA DNOIZ              \ will turn the sound off
+
+ JSR StopMusic          \ Stop any music that's playing
+
+ RTS                    \ Return from the subroutrine
+
+.DK7
+
+ RTS                    \ Return from the subroutrine
 
 INCLUDE "lib/huffman.s.asm"
 INCLUDE "drivers/huffman.asm"
