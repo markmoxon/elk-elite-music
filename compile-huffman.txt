@@ -4,380 +4,461 @@
 .zp_end
 .musicStatus
      1C00
-.huffmunch_block
+.musicOptions
      1C01
+.huffmunch_block
+     1C02
 .page_bytes
-     1C06
+     1C07
 .byte_ptr
-     1C08
+     1C09
 .track_start
-     1C0A
+     1C0B
 .xsav
-     1C0C
-.ysav
      1C0D
-.zp_temp
+.ysav
      1C0E
+.xsav2
+     1C0F
+.zp_temp
+     1C10
 .speaker_on
-     1C12
+     1C14
 .speaker_off
-     1C13
+     1C15
 .start
 .jumptable
-     0E00   4C 12 0E   JMP &0E12
-     0E03   4C 29 0E   JMP &0E29
-     0E06   4C 8C 0E   JMP &0E8C
-     0E09   4C 9F 0E   JMP &0E9F
-     0E0C   4C A5 0E   JMP &0EA5
-     0E0F   4C AF 0E   JMP &0EAF
-.init_tune1
-     0E12   20 3F 0E   JSR &0E3F
-     0E15   A2 A3      LDX #&A3
-     0E17   8E 0A 1C   STX &1C0A
-     0E1A   86 00      STX &00
-     0E1C   A2 10      LDX #&10
+     0E00   4C 19 0E   JMP &0E19
+     0E03   4C 30 0E   JMP &0E30
+     0E06   4C A9 0E   JMP &0EA9
+     0E09   4C C1 0E   JMP &0EC1
+     0E0C   4C D8 0E   JMP &0ED8
+     0E0F   4C E6 0E   JMP &0EE6
+     0E12   4C ED 0E   JMP &0EED
+     0E15   4C F7 0E   JMP &0EF7
+.currentTune
+     0E18   01
+.InitialiseMusic
+     0E19   20 52 0E   JSR &0E52
+     0E1C   A2 3D      LDX #&3D
      0E1E   8E 0B 1C   STX &1C0B
-     0E21   86 01      STX &01
-     0E23   20 40 10   JSR &1040
-     0E26   4C 3F 0E   JMP &0E3F
-.poll_track
-     0E29   8E 0C 1C   STX &1C0C
-     0E2C   8C 0D 1C   STY &1C0D
-     0E2F   20 3F 0E   JSR &0E3F
-     0E32   20 6A 10   JSR &106A
-     0E35   20 3F 0E   JSR &0E3F
-     0E38   AE 0C 1C   LDX &1C0C
-     0E3B   AC 0D 1C   LDY &1C0D
-     0E3E   60         RTS
-.swap_zp
-     0E3F   A5 00      LDA &00
-     0E41   AE 0E 1C   LDX &1C0E
-     0E44   8D 0E 1C   STA &1C0E
-     0E47   86 00      STX &00
-     0E49   A5 01      LDA &01
-     0E4B   AE 0F 1C   LDX &1C0F
-     0E4E   8D 0F 1C   STA &1C0F
-     0E51   86 01      STX &01
-     0E53   A5 02      LDA &02
-     0E55   AE 10 1C   LDX &1C10
-     0E58   8D 10 1C   STA &1C10
-     0E5B   86 02      STX &02
-     0E5D   A5 03      LDA &03
-     0E5F   AE 11 1C   LDX &1C11
-     0E62   8D 11 1C   STA &1C11
-     0E65   86 03      STX &03
-     0E67   60         RTS
+     0E21   86 00      STX &00
+     0E23   A2 11      LDX #&11
+     0E25   8E 0C 1C   STX &1C0C
+     0E28   86 01      STX &01
+     0E2A   20 DA 10   JSR &10DA
+     0E2D   4C 52 0E   JMP &0E52
+.PlayMusicIRQ
+     0E30   8E 0D 1C   STX &1C0D
+     0E33   8C 0E 1C   STY &1C0E
+     0E36   AE 1E 1D   LDX &1D1E
+     0E39   E0 FF      CPX #&FF
+     0E3B   F0 0E      BEQ &0E4B
+     0E3D   2C 01 1C   BIT &1C01
+     0E40   30 09      BMI &0E4B
+     0E42   20 52 0E   JSR &0E52
+     0E45   20 04 11   JSR &1104
+     0E48   20 52 0E   JSR &0E52
+.poll1
+     0E4B   AE 0D 1C   LDX &1C0D
+     0E4E   AC 0E 1C   LDY &1C0E
+     0E51   60         RTS
+.SwapZP
+     0E52   A5 00      LDA &00
+     0E54   AE 10 1C   LDX &1C10
+     0E57   8D 10 1C   STA &1C10
+     0E5A   86 00      STX &00
+     0E5C   A5 01      LDA &01
+     0E5E   AE 11 1C   LDX &1C11
+     0E61   8D 11 1C   STA &1C11
+     0E64   86 01      STX &01
+     0E66   A5 02      LDA &02
+     0E68   AE 12 1C   LDX &1C12
+     0E6B   8D 12 1C   STA &1C12
+     0E6E   86 02      STX &02
+     0E70   A5 03      LDA &03
+     0E72   AE 13 1C   LDX &1C13
+     0E75   8D 13 1C   STA &1C13
+     0E78   86 03      STX &03
+     0E7A   60         RTS
 .LoadMusic1
-     0E68   A2 6F      LDX #&6F
-     0E6A   A0 0E      LDY #&0E
-     0E6C   4C F7 FF   JMP &FFF7
+     0E7B   2C 01 1C   BIT &1C01
+     0E7E   70 17      BVS &0E97
+.lmus1
+     0E80   A2 87      LDX #&87
+     0E82   A0 0E      LDY #&0E
+     0E84   4C F7 FF   JMP &FFF7
 .MUSIC1
-     0E6F   4C 2E 4D ...
-     0E79   0D
+     0E87   4C 2E 4D ...
+     0E91   0D
 .LoadMusic2
-     0E7A   A2 81      LDX #&81
-     0E7C   A0 0E      LDY #&0E
-     0E7E   4C F7 FF   JMP &FFF7
+     0E92   2C 01 1C   BIT &1C01
+     0E95   70 E9      BVS &0E80
+.lmus2
+     0E97   A2 9E      LDX #&9E
+     0E99   A0 0E      LDY #&0E
+     0E9B   4C F7 FF   JMP &FFF7
 .MUSIC2
-     0E81   4C 2E 4D ...
-     0E8B   0D
+     0E9E   4C 2E 4D ...
+     0EA8   0D
 .StopMusic
-     0E8C   A9 00      LDA #&00
-     0E8E   8D 00 1C   STA &1C00
-     0E91   AE 13 1C   LDX &1C13
-     0E94   8E 07 FE   STX &FE07
-     0E97   A9 0F      LDA #&0F
-     0E99   A2 00      LDX #&00
-     0E9B   20 F4 FF   JSR &FFF4
-     0E9E   60         RTS
+     0EA9   A9 00      LDA #&00
+     0EAB   8D 00 1C   STA &1C00
+     0EAE   AD 15 1C   LDA &1C15
+     0EB1   8D 07 FE   STA &FE07
+     0EB4   AD 1E 1D   LDA &1D1E
+     0EB7   C9 01      CMP #&01
+     0EB9   D0 05      BNE &0EC0
+     0EBB   A9 00      LDA #&00
+     0EBD   8D 1E 1D   STA &1D1E
+.stop1
+     0EC0   60         RTS
 .StartMusic
-     0E9F   A9 FF      LDA #&FF
-     0EA1   8D 00 1C   STA &1C00
-     0EA4   60         RTS
+     0EC1   AD 1E 1D   LDA &1D1E
+     0EC4   C9 FF      CMP #&FF
+     0EC6   F0 0F      BEQ &0ED7
+     0EC8   2C 01 1C   BIT &1C01
+     0ECB   30 0A      BMI &0ED7
+     0ECD   A9 01      LDA #&01
+     0ECF   8D 1E 1D   STA &1D1E
+     0ED2   A9 FF      LDA #&FF
+     0ED4   8D 00 1C   STA &1C00
+.star1
+     0ED7   60         RTS
 .LoadPlayMusic1
-     0EA5   20 68 0E   JSR &0E68
-     0EA8   20 12 0E   JSR &0E12
-     0EAB   20 9F 0E   JSR &0E9F
-     0EAE   60         RTS
+     0ED8   20 DF 0E   JSR &0EDF
+     0EDB   20 C1 0E   JSR &0EC1
+     0EDE   60         RTS
+.LoadInitMusic1
+     0EDF   20 7B 0E   JSR &0E7B
+     0EE2   20 19 0E   JSR &0E19
+     0EE5   60         RTS
 .LoadInitMusic2
-     0EAF   20 7A 0E   JSR &0E7A
-     0EB2   20 12 0E   JSR &0E12
-     0EB5   60         RTS
+     0EE6   20 92 0E   JSR &0E92
+     0EE9   20 19 0E   JSR &0E19
+     0EEC   60         RTS
+.ProcessOptions1
+     0EED   E0 51      CPX #&51
+     0EEF   D0 05      BNE &0EF6
+     0EF1   A9 00      LDA #&00
+     0EF3   8D 1E 1D   STA &1D1E
+.DK6
+     0EF6   60         RTS
+.ProcessOptions2
+     0EF7   8E 0F 1C   STX &1C0F
+     0EFA   E0 10      CPX #&10
+     0EFC   D0 0B      BNE &0F09
+     0EFE   A9 FF      LDA #&FF
+     0F00   8D 1E 1D   STA &1D1E
+     0F03   20 A9 0E   JSR &0EA9
+     0F06   4C 4C 0F   JMP &0F4C
+.DK7
+     0F09   E0 65      CPX #&65
+     0F0B   D0 0E      BNE &0F1B
+     0F0D   20 A9 0E   JSR &0EA9
+     0F10   A9 80      LDA #&80
+     0F12   4D 01 1C   EOR &1C01
+     0F15   8D 01 1C   STA &1C01
+     0F18   4C 44 0F   JMP &0F44
+.opts1
+     0F1B   E0 22      CPX #&22
+     0F1D   D0 2D      BNE &0F4C
+     0F1F   AD 00 1C   LDA &1C00
+     0F22   48         PHA
+     0F23   20 A9 0E   JSR &0EA9
+     0F26   A9 40      LDA #&40
+     0F28   4D 01 1C   EOR &1C01
+     0F2B   8D 01 1C   STA &1C01
+     0F2E   20 9C 20   JSR &209C
+     0F31   A5 8F      LDA &8F
+     0F33   F0 06      BEQ &0F3B
+     0F35   20 DF 0E   JSR &0EDF
+     0F38   4C 3E 0F   JMP &0F3E
+.opts2
+     0F3B   20 E6 0E   JSR &0EE6
+.opts3
+     0F3E   68         PLA
+     0F3F   F0 03      BEQ &0F44
+     0F41   20 C1 0E   JSR &0EC1
+.opts4
+     0F44   20 9C 20   JSR &209C
+     0F47   A0 37      LDY #&37
+     0F49   20 04 25   JSR &2504
+.opts5
+     0F4C   AE 0F 1C   LDX &1C0F
+     0F4F   60         RTS
 .huffmunch_load
-     0EB6   84 03      STY &03
-     0EB8   8A         TXA
-     0EB9   0A         ASL A
-     0EBA   85 02      STA &02
-     0EBC   26 03      ROL &03
-     0EBE   A0 01      LDY #&01
-     0EC0   B1 00      LDA (&00),Y
-     0EC2   48         PHA
-     0EC3   8D 04 1C   STA &1C04
-     0EC6   88         DEY
-     0EC7   B1 00      LDA (&00),Y
-     0EC9   48         PHA
-     0ECA   0A         ASL A
-     0ECB   8D 03 1C   STA &1C03
-     0ECE   2E 04 1C   ROL &1C04
-     0ED1   A5 01      LDA &01
-     0ED3   48         PHA
-     0ED4   A5 00      LDA &00
-     0ED6   48         PHA
-     0ED7   18         CLC
-     0ED8   69 02      ADC #&02
-     0EDA   85 00      STA &00
-     0EDC   90 02      BCC &0EE0
-     0EDE   E6 01      INC &01
+     0F50   84 03      STY &03
+     0F52   8A         TXA
+     0F53   0A         ASL A
+     0F54   85 02      STA &02
+     0F56   26 03      ROL &03
+     0F58   A0 01      LDY #&01
+     0F5A   B1 00      LDA (&00),Y
+     0F5C   48         PHA
+     0F5D   8D 05 1C   STA &1C05
+     0F60   88         DEY
+     0F61   B1 00      LDA (&00),Y
+     0F63   48         PHA
+     0F64   0A         ASL A
+     0F65   8D 04 1C   STA &1C04
+     0F68   2E 05 1C   ROL &1C05
+     0F6B   A5 01      LDA &01
+     0F6D   48         PHA
+     0F6E   A5 00      LDA &00
+     0F70   48         PHA
+     0F71   18         CLC
+     0F72   69 02      ADC #&02
+     0F74   85 00      STA &00
+     0F76   90 02      BCC &0F7A
+     0F78   E6 01      INC &01
 .l1
-     0EE0   A5 00      LDA &00
-     0EE2   18         CLC
-     0EE3   6D 03 1C   ADC &1C03
-     0EE6   8D 01 1C   STA &1C01
-     0EE9   A5 01      LDA &01
-     0EEB   6D 04 1C   ADC &1C04
-     0EEE   8D 02 1C   STA &1C02
-     0EF1   AD 01 1C   LDA &1C01
-     0EF4   18         CLC
-     0EF5   6D 03 1C   ADC &1C03
-     0EF8   8D 01 1C   STA &1C01
-     0EFB   AD 02 1C   LDA &1C02
-     0EFE   6D 04 1C   ADC &1C04
-     0F01   8D 02 1C   STA &1C02
-     0F04   A5 00      LDA &00
-     0F06   18         CLC
-     0F07   65 02      ADC &02
-     0F09   85 00      STA &00
-     0F0B   A5 01      LDA &01
-     0F0D   65 03      ADC &03
-     0F0F   85 01      STA &01
-     0F11   68         PLA
-     0F12   18         CLC
-     0F13   71 00      ADC (&00),Y
-     0F15   85 02      STA &02
-     0F17   C8         INY
-     0F18   68         PLA
-     0F19   71 00      ADC (&00),Y
-     0F1B   85 03      STA &03
-     0F1D   A5 00      LDA &00
-     0F1F   18         CLC
-     0F20   6D 03 1C   ADC &1C03
-     0F23   85 00      STA &00
-     0F25   A5 01      LDA &01
-     0F27   6D 04 1C   ADC &1C04
-     0F2A   85 01      STA &01
-     0F2C   B1 00      LDA (&00),Y
-     0F2E   48         PHA
-     0F2F   88         DEY
-     0F30   B1 00      LDA (&00),Y
-     0F32   AA         TAX
-     0F33   68         PLA
-     0F34   A8         TAY
-     0F35   68         PLA
-     0F36   85 00      STA &00
-     0F38   68         PLA
-     0F39   85 01      STA &01
-     0F3B   A9 00      LDA #&00
-     0F3D   8D 03 1C   STA &1C03
-     0F40   8D 04 1C   STA &1C04
-     0F43   8D 05 1C   STA &1C05
-     0F46   60         RTS
+     0F7A   A5 00      LDA &00
+     0F7C   18         CLC
+     0F7D   6D 04 1C   ADC &1C04
+     0F80   8D 02 1C   STA &1C02
+     0F83   A5 01      LDA &01
+     0F85   6D 05 1C   ADC &1C05
+     0F88   8D 03 1C   STA &1C03
+     0F8B   AD 02 1C   LDA &1C02
+     0F8E   18         CLC
+     0F8F   6D 04 1C   ADC &1C04
+     0F92   8D 02 1C   STA &1C02
+     0F95   AD 03 1C   LDA &1C03
+     0F98   6D 05 1C   ADC &1C05
+     0F9B   8D 03 1C   STA &1C03
+     0F9E   A5 00      LDA &00
+     0FA0   18         CLC
+     0FA1   65 02      ADC &02
+     0FA3   85 00      STA &00
+     0FA5   A5 01      LDA &01
+     0FA7   65 03      ADC &03
+     0FA9   85 01      STA &01
+     0FAB   68         PLA
+     0FAC   18         CLC
+     0FAD   71 00      ADC (&00),Y
+     0FAF   85 02      STA &02
+     0FB1   C8         INY
+     0FB2   68         PLA
+     0FB3   71 00      ADC (&00),Y
+     0FB5   85 03      STA &03
+     0FB7   A5 00      LDA &00
+     0FB9   18         CLC
+     0FBA   6D 04 1C   ADC &1C04
+     0FBD   85 00      STA &00
+     0FBF   A5 01      LDA &01
+     0FC1   6D 05 1C   ADC &1C05
+     0FC4   85 01      STA &01
+     0FC6   B1 00      LDA (&00),Y
+     0FC8   48         PHA
+     0FC9   88         DEY
+     0FCA   B1 00      LDA (&00),Y
+     0FCC   AA         TAX
+     0FCD   68         PLA
+     0FCE   A8         TAY
+     0FCF   68         PLA
+     0FD0   85 00      STA &00
+     0FD2   68         PLA
+     0FD3   85 01      STA &01
+     0FD5   A9 00      LDA #&00
+     0FD7   8D 04 1C   STA &1C04
+     0FDA   8D 05 1C   STA &1C05
+     0FDD   8D 06 1C   STA &1C06
+     0FE0   60         RTS
 .huffmunch_read
-     0F47   A0 00      LDY #&00
-     0F49   AD 05 1C   LDA &1C05
-     0F4C   F0 0C      BEQ &0F5A
+     0FE1   A0 00      LDY #&00
+     0FE3   AD 06 1C   LDA &1C06
+     0FE6   F0 0C      BEQ &0FF4
 .emit_byte
-     0F4E   CE 05 1C   DEC &1C05
-     0F51   B1 00      LDA (&00),Y
-     0F53   E6 00      INC &00
-     0F55   D0 02      BNE &0F59
-     0F57   E6 01      INC &01
+     0FE8   CE 06 1C   DEC &1C06
+     0FEB   B1 00      LDA (&00),Y
+     0FED   E6 00      INC &00
+     0FEF   D0 02      BNE &0FF3
+     0FF1   E6 01      INC &01
 .skip_hi1
-     0F59   60         RTS
+     0FF3   60         RTS
 .string_empty
-     0F5A   2C 04 1C   BIT &1C04
-     0F5D   10 5C      BPL &0FBB
-     0F5F   B1 00      LDA (&00),Y
-     0F61   18         CLC
-     0F62   6D 01 1C   ADC &1C01
-     0F65   AA         TAX
-     0F66   C8         INY
-     0F67   B1 00      LDA (&00),Y
-     0F69   6D 02 1C   ADC &1C02
-     0F6C   85 01      STA &01
-     0F6E   86 00      STX &00
-     0F70   A0 00      LDY #&00
-     0F72   B1 00      LDA (&00),Y
-     0F74   C8         INY
-     0F75   C9 02      CMP #&02
-     0F77   F0 25      BEQ &0F9E
-     0F79   AA         TAX
-     0F7A   AD 04 1C   LDA &1C04
-     0F7D   29 7F      AND #&7F
-     0F7F   8D 04 1C   STA &1C04
-     0F82   E0 01      CPX #&01
-     0F84   F0 03      BEQ &0F89
-     0F86   B1 00      LDA (&00),Y
-     0F88   60         RTS
+     0FF4   2C 05 1C   BIT &1C05
+     0FF7   10 5C      BPL &1055
+     0FF9   B1 00      LDA (&00),Y
+     0FFB   18         CLC
+     0FFC   6D 02 1C   ADC &1C02
+     0FFF   AA         TAX
+     1000   C8         INY
+     1001   B1 00      LDA (&00),Y
+     1003   6D 03 1C   ADC &1C03
+     1006   85 01      STA &01
+     1008   86 00      STX &00
+     100A   A0 00      LDY #&00
+     100C   B1 00      LDA (&00),Y
+     100E   C8         INY
+     100F   C9 02      CMP #&02
+     1011   F0 25      BEQ &1038
+     1013   AA         TAX
+     1014   AD 05 1C   LDA &1C05
+     1017   29 7F      AND #&7F
+     1019   8D 05 1C   STA &1C05
+     101C   E0 01      CPX #&01
+     101E   F0 03      BEQ &1023
+     1020   B1 00      LDA (&00),Y
+     1022   60         RTS
 .leaf1
-     0F89   B1 00      LDA (&00),Y
-     0F8B   8D 05 1C   STA &1C05
-     0F8E   A5 00      LDA &00
-     0F90   18         CLC
-     0F91   69 02      ADC #&02
-     0F93   85 00      STA &00
-     0F95   90 02      BCC &0F99
-     0F97   E6 01      INC &01
+     1023   B1 00      LDA (&00),Y
+     1025   8D 06 1C   STA &1C06
+     1028   A5 00      LDA &00
+     102A   18         CLC
+     102B   69 02      ADC #&02
+     102D   85 00      STA &00
+     102F   90 02      BCC &1033
+     1031   E6 01      INC &01
 .skip_hi2
-     0F99   A0 00      LDY #&00
-     0F9B   4C 4E 0F   JMP &0F4E
+     1033   A0 00      LDY #&00
+     1035   4C E8 0F   JMP &0FE8
 .leaf2
-     0F9E   B1 00      LDA (&00),Y
-     0FA0   8D 05 1C   STA &1C05
-     0FA3   A5 00      LDA &00
-     0FA5   18         CLC
-     0FA6   69 02      ADC #&02
-     0FA8   85 00      STA &00
-     0FAA   90 02      BCC &0FAE
-     0FAC   E6 01      INC &01
+     1038   B1 00      LDA (&00),Y
+     103A   8D 06 1C   STA &1C06
+     103D   A5 00      LDA &00
+     103F   18         CLC
+     1040   69 02      ADC #&02
+     1042   85 00      STA &00
+     1044   90 02      BCC &1048
+     1046   E6 01      INC &01
 .skip_hi3
-     0FAE   AD 04 1C   LDA &1C04
-     0FB1   09 80      ORA #&80
-     0FB3   8D 04 1C   STA &1C04
-     0FB6   A0 00      LDY #&00
-     0FB8   4C 4E 0F   JMP &0F4E
+     1048   AD 05 1C   LDA &1C05
+     104B   09 80      ORA #&80
+     104D   8D 05 1C   STA &1C05
+     1050   A0 00      LDY #&00
+     1052   4C E8 0F   JMP &0FE8
 .walk_tree
-     0FBB   AD 01 1C   LDA &1C01
-     0FBE   85 00      STA &00
-     0FC0   AD 02 1C   LDA &1C02
-     0FC3   85 01      STA &01
+     1055   AD 02 1C   LDA &1C02
+     1058   85 00      STA &00
+     105A   AD 03 1C   LDA &1C03
+     105D   85 01      STA &01
 .walk_node
-     0FC5   B1 00      LDA (&00),Y
-     0FC7   C9 03      CMP #&03
-     0FC9   B0 17      BCS &0FE2
-     0FCB   C8         INY
-     0FCC   C9 02      CMP #&02
-     0FCE   F0 07      BEQ &0FD7
-     0FD0   C9 01      CMP #&01
-     0FD2   F0 B5      BEQ &0F89
-     0FD4   B1 00      LDA (&00),Y
-     0FD6   60         RTS
+     105F   B1 00      LDA (&00),Y
+     1061   C9 03      CMP #&03
+     1063   B0 17      BCS &107C
+     1065   C8         INY
+     1066   C9 02      CMP #&02
+     1068   F0 07      BEQ &1071
+     106A   C9 01      CMP #&01
+     106C   F0 B5      BEQ &1023
+     106E   B1 00      LDA (&00),Y
+     1070   60         RTS
 .node2
-     0FD7   AD 04 1C   LDA &1C04
-     0FDA   09 80      ORA #&80
-     0FDC   8D 04 1C   STA &1C04
-     0FDF   4C 9E 0F   JMP &0F9E
+     1071   AD 05 1C   LDA &1C05
+     1074   09 80      ORA #&80
+     1076   8D 05 1C   STA &1C05
+     1079   4C 38 10   JMP &1038
 .node3
-     0FE2   AA         TAX
-     0FE3   CE 04 1C   DEC &1C04
-     0FE6   10 12      BPL &0FFA
-     0FE8   A9 07      LDA #&07
-     0FEA   8D 04 1C   STA &1C04
-     0FED   A0 00      LDY #&00
-     0FEF   B1 02      LDA (&02),Y
-     0FF1   8D 03 1C   STA &1C03
-     0FF4   E6 02      INC &02
-     0FF6   D0 02      BNE &0FFA
-     0FF8   E6 03      INC &03
+     107C   AA         TAX
+     107D   CE 05 1C   DEC &1C05
+     1080   10 12      BPL &1094
+     1082   A9 07      LDA #&07
+     1084   8D 05 1C   STA &1C05
+     1087   A0 00      LDY #&00
+     1089   B1 02      LDA (&02),Y
+     108B   8D 04 1C   STA &1C04
+     108E   E6 02      INC &02
+     1090   D0 02      BNE &1094
+     1092   E6 03      INC &03
 .skip_bitload
-     0FFA   0E 03 1C   ASL &1C03
-     0FFD   B0 1B      BCS &101A
+     1094   0E 04 1C   ASL &1C04
+     1097   B0 1B      BCS &10B4
 .walk_left
-     0FFF   E0 FF      CPX #&FF
-     1001   F0 09      BEQ &100C
-     1003   E6 00      INC &00
-     1005   D0 02      BNE &1009
-     1007   E6 01      INC &01
+     1099   E0 FF      CPX #&FF
+     109B   F0 09      BEQ &10A6
+     109D   E6 00      INC &00
+     109F   D0 02      BNE &10A3
+     10A1   E6 01      INC &01
 .skip_hi4
-     1009   4C C5 0F   JMP &0FC5
+     10A3   4C 5F 10   JMP &105F
 .walk_left_long
-     100C   A5 00      LDA &00
-     100E   18         CLC
-     100F   69 03      ADC #&03
-     1011   85 00      STA &00
-     1013   90 02      BCC &1017
-     1015   E6 01      INC &01
+     10A6   A5 00      LDA &00
+     10A8   18         CLC
+     10A9   69 03      ADC #&03
+     10AB   85 00      STA &00
+     10AD   90 02      BCC &10B1
+     10AF   E6 01      INC &01
 .skip_hi5
-     1017   4C C5 0F   JMP &0FC5
+     10B1   4C 5F 10   JMP &105F
 .walk_right
-     101A   E0 FF      CPX #&FF
-     101C   F0 0D      BEQ &102B
-     101E   8A         TXA
-     101F   18         CLC
-     1020   65 00      ADC &00
-     1022   85 00      STA &00
-     1024   90 02      BCC &1028
-     1026   E6 01      INC &01
+     10B4   E0 FF      CPX #&FF
+     10B6   F0 0D      BEQ &10C5
+     10B8   8A         TXA
+     10B9   18         CLC
+     10BA   65 00      ADC &00
+     10BC   85 00      STA &00
+     10BE   90 02      BCC &10C2
+     10C0   E6 01      INC &01
 .skip_hi6
-     1028   4C C5 0F   JMP &0FC5
+     10C2   4C 5F 10   JMP &105F
 .walk_right_long
-     102B   C8         INY
-     102C   B1 00      LDA (&00),Y
-     102E   18         CLC
-     102F   65 00      ADC &00
-     1031   AA         TAX
-     1032   C8         INY
-     1033   B1 00      LDA (&00),Y
-     1035   65 01      ADC &01
-     1037   85 01      STA &01
-     1039   86 00      STX &00
-     103B   A0 00      LDY #&00
-     103D   4C C5 0F   JMP &0FC5
+     10C5   C8         INY
+     10C6   B1 00      LDA (&00),Y
+     10C8   18         CLC
+     10C9   65 00      ADC &00
+     10CB   AA         TAX
+     10CC   C8         INY
+     10CD   B1 00      LDA (&00),Y
+     10CF   65 01      ADC &01
+     10D1   85 01      STA &01
+     10D3   86 00      STX &00
+     10D5   A0 00      LDY #&00
+     10D7   4C 5F 10   JMP &105F
 .DRIVER_INIT
-     1040   78         SEI
-     1041   A2 00      LDX #&00
-     1043   A0 00      LDY #&00
-     1045   8E 08 1C   STX &1C08
-     1048   8E 09 1C   STX &1C09
-     104B   20 B6 0E   JSR &0EB6
-     104E   8E 06 1C   STX &1C06
-     1051   8C 07 1C   STY &1C07
-     1054   A9 F2      LDA #&F2
-     1056   A2 00      LDX #&00
-     1058   A0 FF      LDY #&FF
-     105A   20 F4 FF   JSR &FFF4
-     105D   8A         TXA
-     105E   29 F8      AND #&F8
-     1060   8D 13 1C   STA &1C13
-     1063   09 02      ORA #&02
-     1065   8D 12 1C   STA &1C12
-     1068   58         CLI
-     1069   60         RTS
+     10DA   78         SEI
+     10DB   A2 00      LDX #&00
+     10DD   A0 00      LDY #&00
+     10DF   8E 09 1C   STX &1C09
+     10E2   8E 0A 1C   STX &1C0A
+     10E5   20 50 0F   JSR &0F50
+     10E8   8E 07 1C   STX &1C07
+     10EB   8C 08 1C   STY &1C08
+     10EE   A9 F2      LDA #&F2
+     10F0   A2 00      LDX #&00
+     10F2   A0 FF      LDY #&FF
+     10F4   20 F4 FF   JSR &FFF4
+     10F7   8A         TXA
+     10F8   29 F8      AND #&F8
+     10FA   8D 15 1C   STA &1C15
+     10FD   09 02      ORA #&02
+     10FF   8D 14 1C   STA &1C14
+     1102   58         CLI
+     1103   60         RTS
 .DRIVER_PLAY
-     106A   A0 00      LDY #&00
-     106C   20 47 0F   JSR &0F47
-     106F   C9 02      CMP #&02
-     1071   AE 13 1C   LDX &1C13
-     1074   90 03      BCC &1079
-     1076   AE 12 1C   LDX &1C12
+     1104   A0 00      LDY #&00
+     1106   20 E1 0F   JSR &0FE1
+     1109   C9 02      CMP #&02
+     110B   AE 15 1C   LDX &1C15
+     110E   90 03      BCC &1113
+     1110   AE 14 1C   LDX &1C14
 .skip_on
-     1079   8E 07 FE   STX &FE07
-     107C   8D 06 FE   STA &FE06
-     107F   EE 08 1C   INC &1C08
-     1082   D0 03      BNE &1087
-     1084   EE 09 1C   INC &1C09
+     1113   8E 07 FE   STX &FE07
+     1116   8D 06 FE   STA &FE06
+     1119   EE 09 1C   INC &1C09
+     111C   D0 03      BNE &1121
+     111E   EE 0A 1C   INC &1C0A
 .skip_hi
-     1087   AD 08 1C   LDA &1C08
-     108A   CD 06 1C   CMP &1C06
-     108D   AD 09 1C   LDA &1C09
-     1090   ED 07 1C   SBC &1C07
-     1093   90 0D      BCC &10A2
-     1095   AD 0A 1C   LDA &1C0A
-     1098   85 00      STA &00
-     109A   AD 0B 1C   LDA &1C0B
-     109D   85 01      STA &01
-     109F   4C 40 10   JMP &1040
+     1121   AD 09 1C   LDA &1C09
+     1124   CD 07 1C   CMP &1C07
+     1127   AD 0A 1C   LDA &1C0A
+     112A   ED 08 1C   SBC &1C08
+     112D   90 0D      BCC &113C
+     112F   AD 0B 1C   LDA &1C0B
+     1132   85 00      STA &00
+     1134   AD 0C 1C   LDA &1C0C
+     1137   85 01      STA &01
+     1139   4C DA 10   JMP &10DA
 .continue
-     10A2   60         RTS
+     113C   60         RTS
 .tune_data1_start
 .tune_data1_end
-HUFFMAN
--------
-
-      Tune 1 size is 1999 bytes
+Tune 1  size is 1999 bytes
 .end
-           Total size is 2674 bytes
+Total size is 2828 bytes
 
-Code ends at &1872 
+Code ends at &190C 
 Saving file 'MUSIC1'
 .zp_start
 .huffmunch_zpblock
@@ -385,378 +466,459 @@ Saving file 'MUSIC1'
 .zp_end
 .musicStatus
      1C00
-.huffmunch_block
+.musicOptions
      1C01
+.huffmunch_block
+     1C02
 .page_bytes
-     1C06
+     1C07
 .byte_ptr
-     1C08
+     1C09
 .track_start
-     1C0A
+     1C0B
 .xsav
-     1C0C
-.ysav
      1C0D
-.zp_temp
+.ysav
      1C0E
+.xsav2
+     1C0F
+.zp_temp
+     1C10
 .speaker_on
-     1C12
+     1C14
 .speaker_off
-     1C13
+     1C15
 .start
 .jumptable
-     0E00   4C 12 0E   JMP &0E12
-     0E03   4C 29 0E   JMP &0E29
-     0E06   4C 8C 0E   JMP &0E8C
-     0E09   4C 9F 0E   JMP &0E9F
-     0E0C   4C A5 0E   JMP &0EA5
-     0E0F   4C AF 0E   JMP &0EAF
-.init_tune1
-     0E12   20 3F 0E   JSR &0E3F
-     0E15   A2 A3      LDX #&A3
-     0E17   8E 0A 1C   STX &1C0A
-     0E1A   86 00      STX &00
-     0E1C   A2 10      LDX #&10
+     0E00   4C 19 0E   JMP &0E19
+     0E03   4C 30 0E   JMP &0E30
+     0E06   4C A9 0E   JMP &0EA9
+     0E09   4C C1 0E   JMP &0EC1
+     0E0C   4C D8 0E   JMP &0ED8
+     0E0F   4C E6 0E   JMP &0EE6
+     0E12   4C ED 0E   JMP &0EED
+     0E15   4C F7 0E   JMP &0EF7
+.currentTune
+     0E18   02
+.InitialiseMusic
+     0E19   20 52 0E   JSR &0E52
+     0E1C   A2 3D      LDX #&3D
      0E1E   8E 0B 1C   STX &1C0B
-     0E21   86 01      STX &01
-     0E23   20 40 10   JSR &1040
-     0E26   4C 3F 0E   JMP &0E3F
-.poll_track
-     0E29   8E 0C 1C   STX &1C0C
-     0E2C   8C 0D 1C   STY &1C0D
-     0E2F   20 3F 0E   JSR &0E3F
-     0E32   20 6A 10   JSR &106A
-     0E35   20 3F 0E   JSR &0E3F
-     0E38   AE 0C 1C   LDX &1C0C
-     0E3B   AC 0D 1C   LDY &1C0D
-     0E3E   60         RTS
-.swap_zp
-     0E3F   A5 00      LDA &00
-     0E41   AE 0E 1C   LDX &1C0E
-     0E44   8D 0E 1C   STA &1C0E
-     0E47   86 00      STX &00
-     0E49   A5 01      LDA &01
-     0E4B   AE 0F 1C   LDX &1C0F
-     0E4E   8D 0F 1C   STA &1C0F
-     0E51   86 01      STX &01
-     0E53   A5 02      LDA &02
-     0E55   AE 10 1C   LDX &1C10
-     0E58   8D 10 1C   STA &1C10
-     0E5B   86 02      STX &02
-     0E5D   A5 03      LDA &03
-     0E5F   AE 11 1C   LDX &1C11
-     0E62   8D 11 1C   STA &1C11
-     0E65   86 03      STX &03
-     0E67   60         RTS
+     0E21   86 00      STX &00
+     0E23   A2 11      LDX #&11
+     0E25   8E 0C 1C   STX &1C0C
+     0E28   86 01      STX &01
+     0E2A   20 DA 10   JSR &10DA
+     0E2D   4C 52 0E   JMP &0E52
+.PlayMusicIRQ
+     0E30   8E 0D 1C   STX &1C0D
+     0E33   8C 0E 1C   STY &1C0E
+     0E36   AE 1E 1D   LDX &1D1E
+     0E39   E0 FF      CPX #&FF
+     0E3B   F0 0E      BEQ &0E4B
+     0E3D   2C 01 1C   BIT &1C01
+     0E40   30 09      BMI &0E4B
+     0E42   20 52 0E   JSR &0E52
+     0E45   20 04 11   JSR &1104
+     0E48   20 52 0E   JSR &0E52
+.poll1
+     0E4B   AE 0D 1C   LDX &1C0D
+     0E4E   AC 0E 1C   LDY &1C0E
+     0E51   60         RTS
+.SwapZP
+     0E52   A5 00      LDA &00
+     0E54   AE 10 1C   LDX &1C10
+     0E57   8D 10 1C   STA &1C10
+     0E5A   86 00      STX &00
+     0E5C   A5 01      LDA &01
+     0E5E   AE 11 1C   LDX &1C11
+     0E61   8D 11 1C   STA &1C11
+     0E64   86 01      STX &01
+     0E66   A5 02      LDA &02
+     0E68   AE 12 1C   LDX &1C12
+     0E6B   8D 12 1C   STA &1C12
+     0E6E   86 02      STX &02
+     0E70   A5 03      LDA &03
+     0E72   AE 13 1C   LDX &1C13
+     0E75   8D 13 1C   STA &1C13
+     0E78   86 03      STX &03
+     0E7A   60         RTS
 .LoadMusic1
-     0E68   A2 6F      LDX #&6F
-     0E6A   A0 0E      LDY #&0E
-     0E6C   4C F7 FF   JMP &FFF7
+     0E7B   2C 01 1C   BIT &1C01
+     0E7E   70 17      BVS &0E97
+.lmus1
+     0E80   A2 87      LDX #&87
+     0E82   A0 0E      LDY #&0E
+     0E84   4C F7 FF   JMP &FFF7
 .MUSIC1
-     0E6F   4C 2E 4D ...
-     0E79   0D
+     0E87   4C 2E 4D ...
+     0E91   0D
 .LoadMusic2
-     0E7A   A2 81      LDX #&81
-     0E7C   A0 0E      LDY #&0E
-     0E7E   4C F7 FF   JMP &FFF7
+     0E92   2C 01 1C   BIT &1C01
+     0E95   70 E9      BVS &0E80
+.lmus2
+     0E97   A2 9E      LDX #&9E
+     0E99   A0 0E      LDY #&0E
+     0E9B   4C F7 FF   JMP &FFF7
 .MUSIC2
-     0E81   4C 2E 4D ...
-     0E8B   0D
+     0E9E   4C 2E 4D ...
+     0EA8   0D
 .StopMusic
-     0E8C   A9 00      LDA #&00
-     0E8E   8D 00 1C   STA &1C00
-     0E91   AE 13 1C   LDX &1C13
-     0E94   8E 07 FE   STX &FE07
-     0E97   A9 0F      LDA #&0F
-     0E99   A2 00      LDX #&00
-     0E9B   20 F4 FF   JSR &FFF4
-     0E9E   60         RTS
+     0EA9   A9 00      LDA #&00
+     0EAB   8D 00 1C   STA &1C00
+     0EAE   AD 15 1C   LDA &1C15
+     0EB1   8D 07 FE   STA &FE07
+     0EB4   AD 1E 1D   LDA &1D1E
+     0EB7   C9 01      CMP #&01
+     0EB9   D0 05      BNE &0EC0
+     0EBB   A9 00      LDA #&00
+     0EBD   8D 1E 1D   STA &1D1E
+.stop1
+     0EC0   60         RTS
 .StartMusic
-     0E9F   A9 FF      LDA #&FF
-     0EA1   8D 00 1C   STA &1C00
-     0EA4   60         RTS
+     0EC1   AD 1E 1D   LDA &1D1E
+     0EC4   C9 FF      CMP #&FF
+     0EC6   F0 0F      BEQ &0ED7
+     0EC8   2C 01 1C   BIT &1C01
+     0ECB   30 0A      BMI &0ED7
+     0ECD   A9 01      LDA #&01
+     0ECF   8D 1E 1D   STA &1D1E
+     0ED2   A9 FF      LDA #&FF
+     0ED4   8D 00 1C   STA &1C00
+.star1
+     0ED7   60         RTS
 .LoadPlayMusic1
-     0EA5   20 68 0E   JSR &0E68
-     0EA8   20 12 0E   JSR &0E12
-     0EAB   20 9F 0E   JSR &0E9F
-     0EAE   60         RTS
+     0ED8   20 DF 0E   JSR &0EDF
+     0EDB   20 C1 0E   JSR &0EC1
+     0EDE   60         RTS
+.LoadInitMusic1
+     0EDF   20 7B 0E   JSR &0E7B
+     0EE2   20 19 0E   JSR &0E19
+     0EE5   60         RTS
 .LoadInitMusic2
-     0EAF   20 7A 0E   JSR &0E7A
-     0EB2   20 12 0E   JSR &0E12
-     0EB5   60         RTS
+     0EE6   20 92 0E   JSR &0E92
+     0EE9   20 19 0E   JSR &0E19
+     0EEC   60         RTS
+.ProcessOptions1
+     0EED   E0 51      CPX #&51
+     0EEF   D0 05      BNE &0EF6
+     0EF1   A9 00      LDA #&00
+     0EF3   8D 1E 1D   STA &1D1E
+.DK6
+     0EF6   60         RTS
+.ProcessOptions2
+     0EF7   8E 0F 1C   STX &1C0F
+     0EFA   E0 10      CPX #&10
+     0EFC   D0 0B      BNE &0F09
+     0EFE   A9 FF      LDA #&FF
+     0F00   8D 1E 1D   STA &1D1E
+     0F03   20 A9 0E   JSR &0EA9
+     0F06   4C 4C 0F   JMP &0F4C
+.DK7
+     0F09   E0 65      CPX #&65
+     0F0B   D0 0E      BNE &0F1B
+     0F0D   20 A9 0E   JSR &0EA9
+     0F10   A9 80      LDA #&80
+     0F12   4D 01 1C   EOR &1C01
+     0F15   8D 01 1C   STA &1C01
+     0F18   4C 44 0F   JMP &0F44
+.opts1
+     0F1B   E0 22      CPX #&22
+     0F1D   D0 2D      BNE &0F4C
+     0F1F   AD 00 1C   LDA &1C00
+     0F22   48         PHA
+     0F23   20 A9 0E   JSR &0EA9
+     0F26   A9 40      LDA #&40
+     0F28   4D 01 1C   EOR &1C01
+     0F2B   8D 01 1C   STA &1C01
+     0F2E   20 9C 20   JSR &209C
+     0F31   A5 8F      LDA &8F
+     0F33   F0 06      BEQ &0F3B
+     0F35   20 DF 0E   JSR &0EDF
+     0F38   4C 3E 0F   JMP &0F3E
+.opts2
+     0F3B   20 E6 0E   JSR &0EE6
+.opts3
+     0F3E   68         PLA
+     0F3F   F0 03      BEQ &0F44
+     0F41   20 C1 0E   JSR &0EC1
+.opts4
+     0F44   20 9C 20   JSR &209C
+     0F47   A0 37      LDY #&37
+     0F49   20 04 25   JSR &2504
+.opts5
+     0F4C   AE 0F 1C   LDX &1C0F
+     0F4F   60         RTS
 .huffmunch_load
-     0EB6   84 03      STY &03
-     0EB8   8A         TXA
-     0EB9   0A         ASL A
-     0EBA   85 02      STA &02
-     0EBC   26 03      ROL &03
-     0EBE   A0 01      LDY #&01
-     0EC0   B1 00      LDA (&00),Y
-     0EC2   48         PHA
-     0EC3   8D 04 1C   STA &1C04
-     0EC6   88         DEY
-     0EC7   B1 00      LDA (&00),Y
-     0EC9   48         PHA
-     0ECA   0A         ASL A
-     0ECB   8D 03 1C   STA &1C03
-     0ECE   2E 04 1C   ROL &1C04
-     0ED1   A5 01      LDA &01
-     0ED3   48         PHA
-     0ED4   A5 00      LDA &00
-     0ED6   48         PHA
-     0ED7   18         CLC
-     0ED8   69 02      ADC #&02
-     0EDA   85 00      STA &00
-     0EDC   90 02      BCC &0EE0
-     0EDE   E6 01      INC &01
+     0F50   84 03      STY &03
+     0F52   8A         TXA
+     0F53   0A         ASL A
+     0F54   85 02      STA &02
+     0F56   26 03      ROL &03
+     0F58   A0 01      LDY #&01
+     0F5A   B1 00      LDA (&00),Y
+     0F5C   48         PHA
+     0F5D   8D 05 1C   STA &1C05
+     0F60   88         DEY
+     0F61   B1 00      LDA (&00),Y
+     0F63   48         PHA
+     0F64   0A         ASL A
+     0F65   8D 04 1C   STA &1C04
+     0F68   2E 05 1C   ROL &1C05
+     0F6B   A5 01      LDA &01
+     0F6D   48         PHA
+     0F6E   A5 00      LDA &00
+     0F70   48         PHA
+     0F71   18         CLC
+     0F72   69 02      ADC #&02
+     0F74   85 00      STA &00
+     0F76   90 02      BCC &0F7A
+     0F78   E6 01      INC &01
 .l1
-     0EE0   A5 00      LDA &00
-     0EE2   18         CLC
-     0EE3   6D 03 1C   ADC &1C03
-     0EE6   8D 01 1C   STA &1C01
-     0EE9   A5 01      LDA &01
-     0EEB   6D 04 1C   ADC &1C04
-     0EEE   8D 02 1C   STA &1C02
-     0EF1   AD 01 1C   LDA &1C01
-     0EF4   18         CLC
-     0EF5   6D 03 1C   ADC &1C03
-     0EF8   8D 01 1C   STA &1C01
-     0EFB   AD 02 1C   LDA &1C02
-     0EFE   6D 04 1C   ADC &1C04
-     0F01   8D 02 1C   STA &1C02
-     0F04   A5 00      LDA &00
-     0F06   18         CLC
-     0F07   65 02      ADC &02
-     0F09   85 00      STA &00
-     0F0B   A5 01      LDA &01
-     0F0D   65 03      ADC &03
-     0F0F   85 01      STA &01
-     0F11   68         PLA
-     0F12   18         CLC
-     0F13   71 00      ADC (&00),Y
-     0F15   85 02      STA &02
-     0F17   C8         INY
-     0F18   68         PLA
-     0F19   71 00      ADC (&00),Y
-     0F1B   85 03      STA &03
-     0F1D   A5 00      LDA &00
-     0F1F   18         CLC
-     0F20   6D 03 1C   ADC &1C03
-     0F23   85 00      STA &00
-     0F25   A5 01      LDA &01
-     0F27   6D 04 1C   ADC &1C04
-     0F2A   85 01      STA &01
-     0F2C   B1 00      LDA (&00),Y
-     0F2E   48         PHA
-     0F2F   88         DEY
-     0F30   B1 00      LDA (&00),Y
-     0F32   AA         TAX
-     0F33   68         PLA
-     0F34   A8         TAY
-     0F35   68         PLA
-     0F36   85 00      STA &00
-     0F38   68         PLA
-     0F39   85 01      STA &01
-     0F3B   A9 00      LDA #&00
-     0F3D   8D 03 1C   STA &1C03
-     0F40   8D 04 1C   STA &1C04
-     0F43   8D 05 1C   STA &1C05
-     0F46   60         RTS
+     0F7A   A5 00      LDA &00
+     0F7C   18         CLC
+     0F7D   6D 04 1C   ADC &1C04
+     0F80   8D 02 1C   STA &1C02
+     0F83   A5 01      LDA &01
+     0F85   6D 05 1C   ADC &1C05
+     0F88   8D 03 1C   STA &1C03
+     0F8B   AD 02 1C   LDA &1C02
+     0F8E   18         CLC
+     0F8F   6D 04 1C   ADC &1C04
+     0F92   8D 02 1C   STA &1C02
+     0F95   AD 03 1C   LDA &1C03
+     0F98   6D 05 1C   ADC &1C05
+     0F9B   8D 03 1C   STA &1C03
+     0F9E   A5 00      LDA &00
+     0FA0   18         CLC
+     0FA1   65 02      ADC &02
+     0FA3   85 00      STA &00
+     0FA5   A5 01      LDA &01
+     0FA7   65 03      ADC &03
+     0FA9   85 01      STA &01
+     0FAB   68         PLA
+     0FAC   18         CLC
+     0FAD   71 00      ADC (&00),Y
+     0FAF   85 02      STA &02
+     0FB1   C8         INY
+     0FB2   68         PLA
+     0FB3   71 00      ADC (&00),Y
+     0FB5   85 03      STA &03
+     0FB7   A5 00      LDA &00
+     0FB9   18         CLC
+     0FBA   6D 04 1C   ADC &1C04
+     0FBD   85 00      STA &00
+     0FBF   A5 01      LDA &01
+     0FC1   6D 05 1C   ADC &1C05
+     0FC4   85 01      STA &01
+     0FC6   B1 00      LDA (&00),Y
+     0FC8   48         PHA
+     0FC9   88         DEY
+     0FCA   B1 00      LDA (&00),Y
+     0FCC   AA         TAX
+     0FCD   68         PLA
+     0FCE   A8         TAY
+     0FCF   68         PLA
+     0FD0   85 00      STA &00
+     0FD2   68         PLA
+     0FD3   85 01      STA &01
+     0FD5   A9 00      LDA #&00
+     0FD7   8D 04 1C   STA &1C04
+     0FDA   8D 05 1C   STA &1C05
+     0FDD   8D 06 1C   STA &1C06
+     0FE0   60         RTS
 .huffmunch_read
-     0F47   A0 00      LDY #&00
-     0F49   AD 05 1C   LDA &1C05
-     0F4C   F0 0C      BEQ &0F5A
+     0FE1   A0 00      LDY #&00
+     0FE3   AD 06 1C   LDA &1C06
+     0FE6   F0 0C      BEQ &0FF4
 .emit_byte
-     0F4E   CE 05 1C   DEC &1C05
-     0F51   B1 00      LDA (&00),Y
-     0F53   E6 00      INC &00
-     0F55   D0 02      BNE &0F59
-     0F57   E6 01      INC &01
+     0FE8   CE 06 1C   DEC &1C06
+     0FEB   B1 00      LDA (&00),Y
+     0FED   E6 00      INC &00
+     0FEF   D0 02      BNE &0FF3
+     0FF1   E6 01      INC &01
 .skip_hi1
-     0F59   60         RTS
+     0FF3   60         RTS
 .string_empty
-     0F5A   2C 04 1C   BIT &1C04
-     0F5D   10 5C      BPL &0FBB
-     0F5F   B1 00      LDA (&00),Y
-     0F61   18         CLC
-     0F62   6D 01 1C   ADC &1C01
-     0F65   AA         TAX
-     0F66   C8         INY
-     0F67   B1 00      LDA (&00),Y
-     0F69   6D 02 1C   ADC &1C02
-     0F6C   85 01      STA &01
-     0F6E   86 00      STX &00
-     0F70   A0 00      LDY #&00
-     0F72   B1 00      LDA (&00),Y
-     0F74   C8         INY
-     0F75   C9 02      CMP #&02
-     0F77   F0 25      BEQ &0F9E
-     0F79   AA         TAX
-     0F7A   AD 04 1C   LDA &1C04
-     0F7D   29 7F      AND #&7F
-     0F7F   8D 04 1C   STA &1C04
-     0F82   E0 01      CPX #&01
-     0F84   F0 03      BEQ &0F89
-     0F86   B1 00      LDA (&00),Y
-     0F88   60         RTS
+     0FF4   2C 05 1C   BIT &1C05
+     0FF7   10 5C      BPL &1055
+     0FF9   B1 00      LDA (&00),Y
+     0FFB   18         CLC
+     0FFC   6D 02 1C   ADC &1C02
+     0FFF   AA         TAX
+     1000   C8         INY
+     1001   B1 00      LDA (&00),Y
+     1003   6D 03 1C   ADC &1C03
+     1006   85 01      STA &01
+     1008   86 00      STX &00
+     100A   A0 00      LDY #&00
+     100C   B1 00      LDA (&00),Y
+     100E   C8         INY
+     100F   C9 02      CMP #&02
+     1011   F0 25      BEQ &1038
+     1013   AA         TAX
+     1014   AD 05 1C   LDA &1C05
+     1017   29 7F      AND #&7F
+     1019   8D 05 1C   STA &1C05
+     101C   E0 01      CPX #&01
+     101E   F0 03      BEQ &1023
+     1020   B1 00      LDA (&00),Y
+     1022   60         RTS
 .leaf1
-     0F89   B1 00      LDA (&00),Y
-     0F8B   8D 05 1C   STA &1C05
-     0F8E   A5 00      LDA &00
-     0F90   18         CLC
-     0F91   69 02      ADC #&02
-     0F93   85 00      STA &00
-     0F95   90 02      BCC &0F99
-     0F97   E6 01      INC &01
+     1023   B1 00      LDA (&00),Y
+     1025   8D 06 1C   STA &1C06
+     1028   A5 00      LDA &00
+     102A   18         CLC
+     102B   69 02      ADC #&02
+     102D   85 00      STA &00
+     102F   90 02      BCC &1033
+     1031   E6 01      INC &01
 .skip_hi2
-     0F99   A0 00      LDY #&00
-     0F9B   4C 4E 0F   JMP &0F4E
+     1033   A0 00      LDY #&00
+     1035   4C E8 0F   JMP &0FE8
 .leaf2
-     0F9E   B1 00      LDA (&00),Y
-     0FA0   8D 05 1C   STA &1C05
-     0FA3   A5 00      LDA &00
-     0FA5   18         CLC
-     0FA6   69 02      ADC #&02
-     0FA8   85 00      STA &00
-     0FAA   90 02      BCC &0FAE
-     0FAC   E6 01      INC &01
+     1038   B1 00      LDA (&00),Y
+     103A   8D 06 1C   STA &1C06
+     103D   A5 00      LDA &00
+     103F   18         CLC
+     1040   69 02      ADC #&02
+     1042   85 00      STA &00
+     1044   90 02      BCC &1048
+     1046   E6 01      INC &01
 .skip_hi3
-     0FAE   AD 04 1C   LDA &1C04
-     0FB1   09 80      ORA #&80
-     0FB3   8D 04 1C   STA &1C04
-     0FB6   A0 00      LDY #&00
-     0FB8   4C 4E 0F   JMP &0F4E
+     1048   AD 05 1C   LDA &1C05
+     104B   09 80      ORA #&80
+     104D   8D 05 1C   STA &1C05
+     1050   A0 00      LDY #&00
+     1052   4C E8 0F   JMP &0FE8
 .walk_tree
-     0FBB   AD 01 1C   LDA &1C01
-     0FBE   85 00      STA &00
-     0FC0   AD 02 1C   LDA &1C02
-     0FC3   85 01      STA &01
+     1055   AD 02 1C   LDA &1C02
+     1058   85 00      STA &00
+     105A   AD 03 1C   LDA &1C03
+     105D   85 01      STA &01
 .walk_node
-     0FC5   B1 00      LDA (&00),Y
-     0FC7   C9 03      CMP #&03
-     0FC9   B0 17      BCS &0FE2
-     0FCB   C8         INY
-     0FCC   C9 02      CMP #&02
-     0FCE   F0 07      BEQ &0FD7
-     0FD0   C9 01      CMP #&01
-     0FD2   F0 B5      BEQ &0F89
-     0FD4   B1 00      LDA (&00),Y
-     0FD6   60         RTS
+     105F   B1 00      LDA (&00),Y
+     1061   C9 03      CMP #&03
+     1063   B0 17      BCS &107C
+     1065   C8         INY
+     1066   C9 02      CMP #&02
+     1068   F0 07      BEQ &1071
+     106A   C9 01      CMP #&01
+     106C   F0 B5      BEQ &1023
+     106E   B1 00      LDA (&00),Y
+     1070   60         RTS
 .node2
-     0FD7   AD 04 1C   LDA &1C04
-     0FDA   09 80      ORA #&80
-     0FDC   8D 04 1C   STA &1C04
-     0FDF   4C 9E 0F   JMP &0F9E
+     1071   AD 05 1C   LDA &1C05
+     1074   09 80      ORA #&80
+     1076   8D 05 1C   STA &1C05
+     1079   4C 38 10   JMP &1038
 .node3
-     0FE2   AA         TAX
-     0FE3   CE 04 1C   DEC &1C04
-     0FE6   10 12      BPL &0FFA
-     0FE8   A9 07      LDA #&07
-     0FEA   8D 04 1C   STA &1C04
-     0FED   A0 00      LDY #&00
-     0FEF   B1 02      LDA (&02),Y
-     0FF1   8D 03 1C   STA &1C03
-     0FF4   E6 02      INC &02
-     0FF6   D0 02      BNE &0FFA
-     0FF8   E6 03      INC &03
+     107C   AA         TAX
+     107D   CE 05 1C   DEC &1C05
+     1080   10 12      BPL &1094
+     1082   A9 07      LDA #&07
+     1084   8D 05 1C   STA &1C05
+     1087   A0 00      LDY #&00
+     1089   B1 02      LDA (&02),Y
+     108B   8D 04 1C   STA &1C04
+     108E   E6 02      INC &02
+     1090   D0 02      BNE &1094
+     1092   E6 03      INC &03
 .skip_bitload
-     0FFA   0E 03 1C   ASL &1C03
-     0FFD   B0 1B      BCS &101A
+     1094   0E 04 1C   ASL &1C04
+     1097   B0 1B      BCS &10B4
 .walk_left
-     0FFF   E0 FF      CPX #&FF
-     1001   F0 09      BEQ &100C
-     1003   E6 00      INC &00
-     1005   D0 02      BNE &1009
-     1007   E6 01      INC &01
+     1099   E0 FF      CPX #&FF
+     109B   F0 09      BEQ &10A6
+     109D   E6 00      INC &00
+     109F   D0 02      BNE &10A3
+     10A1   E6 01      INC &01
 .skip_hi4
-     1009   4C C5 0F   JMP &0FC5
+     10A3   4C 5F 10   JMP &105F
 .walk_left_long
-     100C   A5 00      LDA &00
-     100E   18         CLC
-     100F   69 03      ADC #&03
-     1011   85 00      STA &00
-     1013   90 02      BCC &1017
-     1015   E6 01      INC &01
+     10A6   A5 00      LDA &00
+     10A8   18         CLC
+     10A9   69 03      ADC #&03
+     10AB   85 00      STA &00
+     10AD   90 02      BCC &10B1
+     10AF   E6 01      INC &01
 .skip_hi5
-     1017   4C C5 0F   JMP &0FC5
+     10B1   4C 5F 10   JMP &105F
 .walk_right
-     101A   E0 FF      CPX #&FF
-     101C   F0 0D      BEQ &102B
-     101E   8A         TXA
-     101F   18         CLC
-     1020   65 00      ADC &00
-     1022   85 00      STA &00
-     1024   90 02      BCC &1028
-     1026   E6 01      INC &01
+     10B4   E0 FF      CPX #&FF
+     10B6   F0 0D      BEQ &10C5
+     10B8   8A         TXA
+     10B9   18         CLC
+     10BA   65 00      ADC &00
+     10BC   85 00      STA &00
+     10BE   90 02      BCC &10C2
+     10C0   E6 01      INC &01
 .skip_hi6
-     1028   4C C5 0F   JMP &0FC5
+     10C2   4C 5F 10   JMP &105F
 .walk_right_long
-     102B   C8         INY
-     102C   B1 00      LDA (&00),Y
-     102E   18         CLC
-     102F   65 00      ADC &00
-     1031   AA         TAX
-     1032   C8         INY
-     1033   B1 00      LDA (&00),Y
-     1035   65 01      ADC &01
-     1037   85 01      STA &01
-     1039   86 00      STX &00
-     103B   A0 00      LDY #&00
-     103D   4C C5 0F   JMP &0FC5
+     10C5   C8         INY
+     10C6   B1 00      LDA (&00),Y
+     10C8   18         CLC
+     10C9   65 00      ADC &00
+     10CB   AA         TAX
+     10CC   C8         INY
+     10CD   B1 00      LDA (&00),Y
+     10CF   65 01      ADC &01
+     10D1   85 01      STA &01
+     10D3   86 00      STX &00
+     10D5   A0 00      LDY #&00
+     10D7   4C 5F 10   JMP &105F
 .DRIVER_INIT
-     1040   78         SEI
-     1041   A2 00      LDX #&00
-     1043   A0 00      LDY #&00
-     1045   8E 08 1C   STX &1C08
-     1048   8E 09 1C   STX &1C09
-     104B   20 B6 0E   JSR &0EB6
-     104E   8E 06 1C   STX &1C06
-     1051   8C 07 1C   STY &1C07
-     1054   A9 F2      LDA #&F2
-     1056   A2 00      LDX #&00
-     1058   A0 FF      LDY #&FF
-     105A   20 F4 FF   JSR &FFF4
-     105D   8A         TXA
-     105E   29 F8      AND #&F8
-     1060   8D 13 1C   STA &1C13
-     1063   09 02      ORA #&02
-     1065   8D 12 1C   STA &1C12
-     1068   58         CLI
-     1069   60         RTS
+     10DA   78         SEI
+     10DB   A2 00      LDX #&00
+     10DD   A0 00      LDY #&00
+     10DF   8E 09 1C   STX &1C09
+     10E2   8E 0A 1C   STX &1C0A
+     10E5   20 50 0F   JSR &0F50
+     10E8   8E 07 1C   STX &1C07
+     10EB   8C 08 1C   STY &1C08
+     10EE   A9 F2      LDA #&F2
+     10F0   A2 00      LDX #&00
+     10F2   A0 FF      LDY #&FF
+     10F4   20 F4 FF   JSR &FFF4
+     10F7   8A         TXA
+     10F8   29 F8      AND #&F8
+     10FA   8D 15 1C   STA &1C15
+     10FD   09 02      ORA #&02
+     10FF   8D 14 1C   STA &1C14
+     1102   58         CLI
+     1103   60         RTS
 .DRIVER_PLAY
-     106A   A0 00      LDY #&00
-     106C   20 47 0F   JSR &0F47
-     106F   C9 02      CMP #&02
-     1071   AE 13 1C   LDX &1C13
-     1074   90 03      BCC &1079
-     1076   AE 12 1C   LDX &1C12
+     1104   A0 00      LDY #&00
+     1106   20 E1 0F   JSR &0FE1
+     1109   C9 02      CMP #&02
+     110B   AE 15 1C   LDX &1C15
+     110E   90 03      BCC &1113
+     1110   AE 14 1C   LDX &1C14
 .skip_on
-     1079   8E 07 FE   STX &FE07
-     107C   8D 06 FE   STA &FE06
-     107F   EE 08 1C   INC &1C08
-     1082   D0 03      BNE &1087
-     1084   EE 09 1C   INC &1C09
+     1113   8E 07 FE   STX &FE07
+     1116   8D 06 FE   STA &FE06
+     1119   EE 09 1C   INC &1C09
+     111C   D0 03      BNE &1121
+     111E   EE 0A 1C   INC &1C0A
 .skip_hi
-     1087   AD 08 1C   LDA &1C08
-     108A   CD 06 1C   CMP &1C06
-     108D   AD 09 1C   LDA &1C09
-     1090   ED 07 1C   SBC &1C07
-     1093   90 0D      BCC &10A2
-     1095   AD 0A 1C   LDA &1C0A
-     1098   85 00      STA &00
-     109A   AD 0B 1C   LDA &1C0B
-     109D   85 01      STA &01
-     109F   4C 40 10   JMP &1040
+     1121   AD 09 1C   LDA &1C09
+     1124   CD 07 1C   CMP &1C07
+     1127   AD 0A 1C   LDA &1C0A
+     112A   ED 08 1C   SBC &1C08
+     112D   90 0D      BCC &113C
+     112F   AD 0B 1C   LDA &1C0B
+     1132   85 00      STA &00
+     1134   AD 0C 1C   LDA &1C0C
+     1137   85 01      STA &01
+     1139   4C DA 10   JMP &10DA
 .continue
-     10A2   60         RTS
+     113C   60         RTS
 .tune_data1_start
 .tune_data1_end
-HUFFMAN
--------
-
-      Tune 1 size is 2595 bytes
+Tune 2  size is 2595 bytes
 .end
-           Total size is 3270 bytes
+Total size is 3424 bytes
 
-Code ends at &1AC6 
+Code ends at &1B60 
 Saving file 'MUSIC2'
