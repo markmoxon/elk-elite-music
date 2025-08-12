@@ -229,7 +229,7 @@ GUARD &1C00             \ Don't overwrite the music variable space
 
  JSR LoadMusic1         \ Load the Elite Theme music file
 
- JSR InitialiseMusic         \ Initialise the music
+ JSR InitialiseMusic    \ Initialise the music
 
  RTS                    \ Return from the subroutrine
 
@@ -237,7 +237,7 @@ GUARD &1C00             \ Don't overwrite the music variable space
 
  JSR LoadMusic2         \ Load the Blue Danube music file
 
- JSR InitialiseMusic         \ Initialise the music
+ JSR InitialiseMusic    \ Initialise the music
 
  RTS                    \ Return from the subroutrine
 
