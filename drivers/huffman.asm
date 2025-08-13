@@ -61,7 +61,7 @@
     lda     track_start+1               ; 3
     sta     huffmunch_zpblock+1         ; 3
 
-sei
+    sei
     ldx     #0
 	ldy     #0
     stx     byte_ptr+0
@@ -69,7 +69,7 @@ sei
 	jsr     huffmunch_load
     stx     page_bytes+0
 	sty     page_bytes+1
-cli
+    cli
 
  LDA #&FF                \ Start the music playing again
  STA musicStatus
