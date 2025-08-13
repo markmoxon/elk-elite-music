@@ -11,7 +11,7 @@ DELAY = &2504
 IF ssd = 1
  ORG &0070              \ For testing with BASIC player.bas on a SSD
 ELSE
- ORG &0000              \ For Electron Elite
+ ORG &00A8              \ For Electron Elite (uses star-command workspace)
 ENDIF
 
 .zp_start
@@ -46,7 +46,6 @@ ENDIF
 .xsav               SKIP 1
 .ysav               SKIP 1
 .xsav2              SKIP 1
-.zp_temp            SKIP 4
 .speaker_on         SKIP 1
 .speaker_off        SKIP 1
 
@@ -77,8 +76,6 @@ GUARD &1C00             \ Don't overwrite the music variable space
 
 .InitialiseMusic
 
- JSR SwapZP             \ Preserve zero page &0000 to &0004
-
  LDX #<tune_data1_start \ Set pointers to track data, starting with the low byte
  STX track_start
  STX huffmunch_zpblock
@@ -87,10 +84,8 @@ GUARD &1C00             \ Don't overwrite the music variable space
  STX track_start+1
  STX huffmunch_zpblock+1
 
- JSR DRIVER_INIT        \ Initialise the music
-
- JMP SwapZP             \ Preserve zero page &0000 to &0004 and return from
-                        \ the subroutine using a tail call
+ JMP DRIVER_INIT        \ Initialise the music and return from the subroutine
+                        \ using a tail call
 
 .PlayMusicIRQ
 
@@ -104,40 +99,12 @@ GUARD &1C00             \ Don't overwrite the music variable space
  BIT musicOptions       \ If bit 7 of musicOptions is set then music is
  BMI poll1              \ disabled, so return from the subroutine
 
- JSR SwapZP             \ Preserve zero page &0000 to &0004
-
  JSR DRIVER_PLAY        \ Play the music
-
- JSR SwapZP             \ Preserve zero page &0000 to &0004
 
 .poll1
 
  LDX xsav               \ Retrieve X and Y
  LDY ysav
-
- RTS                    \ Return from the subroutrine
-
-.SwapZP
-
- LDA &0000              \ Swap RAND (&0000) with zp_temp
- LDX zp_temp
- STA zp_temp
- STX &0000
-
- LDA &0001              \ Swap RAND+1 (&0001) with zp_temp+1
- LDX zp_temp+1
- STA zp_temp+1
- STX &0001
-
- LDA &0002              \ Swap RAND+2 (&0002) with zp_temp+2
- LDX zp_temp+2
- STA zp_temp+2
- STX &0002
-
- LDA &0003              \ Swap RAND+3 (&0003) with zp_temp+3
- LDX zp_temp+3
- STA zp_temp+3
- STX &0003
 
  RTS                    \ Return from the subroutrine
 

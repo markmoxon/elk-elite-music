@@ -56,12 +56,11 @@
  LDA speaker_off        \ Disable the speaker
  STA SHEILA_MISC_CONTROL
 
+    sei
     lda     track_start+0               ; 3
     sta     huffmunch_zpblock+0         ; 3
     lda     track_start+1               ; 3
     sta     huffmunch_zpblock+1         ; 3
-
-    sei
     ldx     #0
 	ldy     #0
     stx     byte_ptr+0
