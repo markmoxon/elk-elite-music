@@ -156,7 +156,7 @@
      0F0B   A9 40      LDA #&40
      0F0D   4D 01 1C   EOR &1C01
      0F10   8D 01 1C   STA &1C01
-     0F13   20 9C 20   JSR &209C
+     0F13   20 9D 20   JSR &209D
      0F16   A5 8F      LDA &8F
      0F18   F0 06      BEQ &0F20
      0F1A   20 AA 0E   JSR &0EAA
@@ -168,9 +168,9 @@
      0F24   F0 03      BEQ &0F29
      0F26   20 8C 0E   JSR &0E8C
 .opts4
-     0F29   20 9C 20   JSR &209C
+     0F29   20 9D 20   JSR &209D
      0F2C   A0 37      LDY #&37
-     0F2E   20 04 25   JSR &2504
+     0F2E   20 05 25   JSR &2505
 .opts5
      0F31   AE 0F 1C   LDX &1C0F
      0F34   60         RTS
@@ -619,7 +619,7 @@ Saving file 'output/ssd/MUSIC1'
      0F0B   A9 40      LDA #&40
      0F0D   4D 01 1C   EOR &1C01
      0F10   8D 01 1C   STA &1C01
-     0F13   20 9C 20   JSR &209C
+     0F13   20 9D 20   JSR &209D
      0F16   A5 8F      LDA &8F
      0F18   F0 06      BEQ &0F20
      0F1A   20 AA 0E   JSR &0EAA
@@ -631,9 +631,9 @@ Saving file 'output/ssd/MUSIC1'
      0F24   F0 03      BEQ &0F29
      0F26   20 8C 0E   JSR &0E8C
 .opts4
-     0F29   20 9C 20   JSR &209C
+     0F29   20 9D 20   JSR &209D
      0F2C   A0 37      LDY #&37
-     0F2E   20 04 25   JSR &2504
+     0F2E   20 05 25   JSR &2505
 .opts5
      0F31   AE 0F 1C   LDX &1C0F
      0F34   60         RTS

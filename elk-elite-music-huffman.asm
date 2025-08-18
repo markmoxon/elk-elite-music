@@ -8,8 +8,8 @@ DNOIZ = &1D1E
 JSTE = &1D24
 JSTK = &1D25
 BSTK = &1D26
-BELL = &209C
-DELAY = &2504
+BELL = &209D
+DELAY = &2505
 joyType = &3903
 
 IF ssd = 1
