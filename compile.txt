@@ -142,7 +142,7 @@
      0EE6   E0 64      CPX #&64
      0EE8   D0 16      BNE &0F00
      0EEA   A9 00      LDA #&00
-     0EEC   8D 03 39   STA &3903
+     0EEC   8D 04 39   STA &3904
      0EEF   AD 26 1D   LDA &1D26
      0EF2   49 FF      EOR #&FF
      0EF4   8D 26 1D   STA &1D26
@@ -607,7 +607,7 @@ Saving file 'output/ssd/MUSIC1'
      0EE6   E0 64      CPX #&64
      0EE8   D0 16      BNE &0F00
      0EEA   A9 00      LDA #&00
-     0EEC   8D 03 39   STA &3903
+     0EEC   8D 04 39   STA &3904
      0EEF   AD 26 1D   LDA &1D26
      0EF2   49 FF      EOR #&FF
      0EF4   8D 26 1D   STA &1D26
