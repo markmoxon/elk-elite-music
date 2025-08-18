@@ -272,6 +272,27 @@ GUARD &1C00             \ Don't overwrite the music variable space
 
 .opts1
 
+ CPX #&64               \ If "B" is not being pressed, skip to nobit
+ BNE nobit
+
+ LDA #0                 \ Set the joystick type to Plus 1, as Bitstik will only
+ STA joyType            \ work with the ADC interface
+
+ LDA BSTK               \ Toggle the value of BSTK between 0 and &FF
+ EOR #&FF
+ STA BSTK
+
+ STA JSTK               \ Configure JSTK to the same value, so when the Bitstik
+                        \ is enabled, so is the joystick
+
+ STA JSTE               \ Configure JSTE to the same value, so when the Bitstik
+                        \ is enabled, the joystick is configured with reversed
+                        \ channels
+
+ JMP opts4              \ Jump to opts4 to make a beep and return from the
+                        \ subroutine
+
+.nobit
                         \ The new "E" option swaps the docking and title tunes
 
  CPX #&22               \ If "E" is not being pressed, skip to opts5 to return
@@ -314,25 +335,6 @@ GUARD &1C00             \ Don't overwrite the music variable space
  JSR DELAY
 
 .opts5
-
- CPX #&64               \ If "B" is not being pressed, skip to nobit
- BNE nobit
-
- LDA #0                 \ Set the joystick type to Plus 1, as Bitstik will only
- STA joyType            \ work with the ADC interface
-
- LDA BSTK               \ Toggle the value of BSTK between 0 and &FF
- EOR #&FF
- STA BSTK
-
- STA JSTK               \ Configure JSTK to the same value, so when the Bitstik
-                        \ is enabled, so is the joystick
-
- STA JSTE               \ Configure JSTE to the same value, so when the Bitstik
-                        \ is enabled, the joystick is configured with reversed
-                        \ channels
-
-.nobit
 
  LDX xsav2              \ Retrieve the original key press into X
 
