@@ -10,7 +10,7 @@ JSTK = &1D25
 BSTK = &1D26
 BELL = &209D
 DELAY = &2505
-joyType = &3903
+joyType = &3904
 
 IF ssd = 1
  ORG &0070              \ For testing with BASIC player.bas on a SSD
