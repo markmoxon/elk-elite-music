@@ -50,6 +50,7 @@ ENDIF
 .xsav               SKIP 1
 .ysav               SKIP 1
 .xsav2              SKIP 1
+.status_sav         SKIP 1
 .speaker_on         SKIP 1
 .speaker_off        SKIP 1
 
@@ -293,13 +294,14 @@ GUARD &1C00             \ Don't overwrite the music variable space
                         \ subroutine
 
 .nobit
+
                         \ The new "E" option swaps the docking and title tunes
 
  CPX #&22               \ If "E" is not being pressed, skip to opts5 to return
  BNE opts5              \ from the subroutine
 
- LDA musicStatus        \ Store the flags for musicStatus on the stack 
- PHA
+ LDA musicStatus        \ Store the flags for musicStatus in status_sav
+ STA status_sav
 
  JSR StopMusic          \ Stop any music that's playing
 
@@ -322,7 +324,7 @@ GUARD &1C00             \ Don't overwrite the music variable space
 
 .opts3
 
- PLA                    \ If we were not playing music before we switched tunes,
+ LDA status_sav         \ If we were not playing music before we switched tunes,
  BEQ opts4              \ jump to opts4
 
  JSR StartMusic         \ Start playing the music again
