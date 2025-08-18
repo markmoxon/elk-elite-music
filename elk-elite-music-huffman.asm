@@ -5,8 +5,12 @@ SHEILA_MISC_CONTROL     = $FE07
 
 QQ12 = &008F            \ Must match Electron Elite
 DNOIZ = &1D1E
+JSTE = &1D24
+JSTK = &1D25
+BSTK = &1D26
 BELL = &209C
 DELAY = &2504
+joyType = &3903
 
 IF ssd = 1
  ORG &0070              \ For testing with BASIC player.bas on a SSD
@@ -310,6 +314,25 @@ GUARD &1C00             \ Don't overwrite the music variable space
  JSR DELAY
 
 .opts5
+
+ CPX #&64               \ If "B" is not being pressed, skip to nobit
+ BNE nobit
+
+ LDA #0                 \ Set the joystick type to Plus 1, as Bitstik will only
+ STA joyType            \ work with the ADC interface
+
+ LDA BSTK               \ Toggle the value of BSTK between 0 and &FF
+ EOR #&FF
+ STA BSTK
+
+ STA JSTK               \ Configure JSTK to the same value, so when the Bitstik
+                        \ is enabled, so is the joystick
+
+ STA JSTE               \ Configure JSTE to the same value, so when the Bitstik
+                        \ is enabled, the joystick is configured with reversed
+                        \ channels
+
+.nobit
 
  LDX xsav2              \ Retrieve the original key press into X
 
