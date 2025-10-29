@@ -39,7 +39,7 @@
 .currentTune
      0E18   01
 .InitialiseMusic
-     0E19   A2 00      LDX #&00
+     0E19   A2 0C      LDX #&0C
      0E1B   8E DB 1C   STX &1CDB
      0E1E   86 70      STX &70
      0E20   A2 12      LDX #&12
@@ -566,13 +566,19 @@
 .joyType
      11FF   00
 .joyConfig
+     1200   2B 31 
+     1202   53 4C 
+     1204   46 42 
+     1206   44 41 
+     1208   44 42 
+     120A   4B 42 
 .tune_data1_start
 .tune_data1_end
 Tune 1  size is 1999 bytes
 .end
-Total size is 3023 bytes
+Total size is 3035 bytes
 
-Code ends at &19CF 
+Code ends at &19DB 
 Saving file 'output/ssd/MUSIC1'
 .zp_start
 .huffmunch_zpblock
@@ -615,7 +621,7 @@ Saving file 'output/ssd/MUSIC1'
 .currentTune
      0E18   02
 .InitialiseMusic
-     0E19   A2 00      LDX #&00
+     0E19   A2 0C      LDX #&0C
      0E1B   8E DB 1C   STX &1CDB
      0E1E   86 70      STX &70
      0E20   A2 12      LDX #&12
@@ -1142,11 +1148,17 @@ Saving file 'output/ssd/MUSIC1'
 .joyType
      11FF   00
 .joyConfig
+     1200   2B 31 
+     1202   53 4C 
+     1204   46 42 
+     1206   44 41 
+     1208   44 42 
+     120A   4B 42 
 .tune_data1_start
 .tune_data1_end
 Tune 2  size is 2595 bytes
 .end
-Total size is 3619 bytes
+Total size is 3631 bytes
 
-Code ends at &1C23 
+Code ends at &1C2F 
 Saving file 'output/ssd/MUSIC2'

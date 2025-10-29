@@ -736,12 +736,12 @@ GUARD &1CD0             \ Don't overwrite the music variable space
 
 .joyConfig
 
-\ EQUS "+1"
-\ EQUS "SL"
-\ EQUS "FB"
-\ EQUS "DA"
-\ EQUS "DB"
-\ EQUS "KB"
+ EQUS "+1"
+ EQUS "SL"
+ EQUS "FB"
+ EQUS "DA"
+ EQUS "DB"
+ EQUS "KB"
 
                         \ --- End of moved code ------------------------------->
 
