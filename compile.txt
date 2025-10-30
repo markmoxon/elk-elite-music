@@ -505,7 +505,7 @@
      1188   C0 09      CPY #&09
      118A   F0 0F      BEQ &119B
      118C   A9 FF      LDA #&FF
-     118E   99 94 4C   STA &4C94,Y
+     118E   99 8A 4C   STA &4C8A,Y
      1191   60         RTS
 .b_front
      1192   AE 17 86   LDX &8617
@@ -518,7 +518,7 @@
      11A0   F0 CB      BEQ &116D
      11A2   A2 B1      LDX #&B1
 .b_return
-     11A4   8E 94 4C   STX &4C94
+     11A4   8E 8A 4C   STX &4C8A
      11A7   60         RTS
 .joys2
      11A8   BD DF 1C   LDA &1CDF,X
@@ -1087,7 +1087,7 @@ Saving file 'output/ssd/MUSIC1'
      1188   C0 09      CPY #&09
      118A   F0 0F      BEQ &119B
      118C   A9 FF      LDA #&FF
-     118E   99 94 4C   STA &4C94,Y
+     118E   99 8A 4C   STA &4C8A,Y
      1191   60         RTS
 .b_front
      1192   AE 17 86   LDX &8617
@@ -1100,7 +1100,7 @@ Saving file 'output/ssd/MUSIC1'
      11A0   F0 CB      BEQ &116D
      11A2   A2 B1      LDX #&B1
 .b_return
-     11A4   8E 94 4C   STX &4C94
+     11A4   8E 8A 4C   STX &4C8A
      11A7   60         RTS
 .joys2
      11A8   BD DF 1C   LDA &1CDF,X

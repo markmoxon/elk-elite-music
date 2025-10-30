@@ -16,7 +16,7 @@ TT26 = &1FD8
 BELL = &209D
 DELAY = &2505
 EnablePlus1 = &3581
-KL = &4C94
+KL = &4C8A
 VIEW = &8617
 
 func1 = &B0
