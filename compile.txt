@@ -573,6 +573,7 @@
      1208   44 42 
      120A   4B 42 
 .tune_data1_start
+     120C   01 00 74 ... INCBIN "music/00_Elite_Theme.huf"
 .tune_data1_end
 Tune 1  size is 1999 bytes
 .end
@@ -1155,6 +1156,7 @@ Saving file 'output/ssd/MUSIC1'
      1208   44 42 
      120A   4B 42 
 .tune_data1_start
+     120C   01 00 B2 ... INCBIN "music/01_Blue_Danube.huf"
 .tune_data1_end
 Tune 2  size is 2595 bytes
 .end
