@@ -16,15 +16,17 @@ BSTK = &1D26
 DTW4 = &1FCF
 DTW5 = &1FD0
 TT26 = &1FD8
-BELL = &209D
-DELAY = &2505
-TT67 = &258A
-spec2 = &2625
-spec3 = &2670
-EnablePlus1 = &3597
-MT14 = &3BD1
-MT15 = &3BD4
-KL = &4CA0
+BELL = &20A2
+TT66 = &249A
+DELAY = &250A
+TT67 = &258F
+TT75 = &261F
+spec2 = &2624
+spec3 = &266F
+EnablePlus1 = &3596
+MT14 = &3BD0
+MT15 = &3BD3
+KL = &4C9F
 VIEW = &8617
 
 func1 = &B0
@@ -758,7 +760,7 @@ GUARD &1CD0             \ Don't overwrite the music variable space
 \       Name: GetSpeciesSize
 \       Type: Subroutine
 \   Category: Species bug fix
-\    Summary: Set A to the size of the species line
+\    Summary: Modify the code at TT75 to the size of the species line
 \
 \ ******************************************************************************
 
@@ -774,16 +776,16 @@ GUARD &1CD0             \ Don't overwrite the music variable space
 
  JSR spec2              \ Print the species string in brackets, into the buffer
 
- LDA DTW5               \ Store the length of the species line on the stack
- PHA
+ LDA DTW5               \ Modify the operand of the LDA instruction at TT75 to
+ STA TT75+1             \ the length of the species line
 
  JSR MT15               \ Call MT15 to switch to left-aligned text when printing
                         \ extended tokens disabling the justify text setting we
                         \ set above
 
- PLA                    \ Set A to the length of the species line
-
- RTS                    \ Return from the subroutine
+ JMP TT66-2             \ Clear the top part of the screen, draw a border box,
+                        \ and set the current view type in QQ11 to 1, returning
+                        \ from the subroutine using a tail call
 
                         \ --- End of added code ------------------------------->
 
