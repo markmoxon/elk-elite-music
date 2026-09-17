@@ -3,7 +3,8 @@ OSCLI                   = $FFF7
 SHEILA_COUNTER          = $FE06
 SHEILA_MISC_CONTROL     = $FE07
 
-XC = &002C              \ Must match Electron Elite
+LL = 30                 \ Must match Electron Elite
+XC = &002C
 YC = &002D
 QQ12 = &008F
 T = &00D1
@@ -12,10 +13,16 @@ DAMP = &1D1F
 JSTE = &1D24
 JSTK = &1D25
 BSTK = &1D26
+DTW4 = &1FCF
+DTW5 = &1FD0
 TT26 = &1FD8
 BELL = &209D
 DELAY = &2505
+TT67 = &258A
+spec2 = &2626
 EnablePlus1 = &3581
+MT14 = &3BD2
+MT15 = &3BD5
 KL = &4C8A
 VIEW = &8617
 
@@ -744,6 +751,92 @@ GUARD &1CD0             \ Don't overwrite the music variable space
  EQUS "KB"
 
                         \ --- End of moved code ------------------------------->
+
+\ ******************************************************************************
+\
+\       Name: GetSpeciesSize
+\       Type: Subroutine
+\   Category: Species bug fix
+\    Summary: Set A to the size of the species line
+\
+\ ******************************************************************************
+
+                        \ --- Mod: Code added for species bug fix: ------------>
+
+.GetSpeciesSize
+
+ LDA #%11000000         \ Set the DTW4 flag to %11000000 (justify text, buffer
+ STA DTW4               \ entire token including carriage returns)
+
+ LDA #0                 \ Set DTW5 to 0, so DTW5 (which holds the size of the
+ STA DTW5               \ justified text buffer at BUF) is zeroed
+
+ JSR spec2              \ Print the species string in brackets, into the buffer
+
+ LDA DTW5               \ Store the length of the species line on the stack
+ PHA
+
+ JSR MT15               \ Call MT15 to switch to left-aligned text when printing
+                        \ extended tokens disabling the justify text setting we
+                        \ set above
+
+ PLA                    \ Set A to the length of the species line
+
+ RTS                    \ Return from the subroutine
+
+                        \ --- End of added code ------------------------------->
+
+\ ******************************************************************************
+\
+\       Name: PrintSpecies
+\       Type: Subroutine
+\   Category: Species bug fix
+\    Summary: Print the species line to wrap if required, while inserting the
+\             correct number of blank lines
+\
+\ ******************************************************************************
+
+                        \ --- Mod: Code added for species bug fix: ------------>
+
+.PrintSpecies
+
+ LDA #0                 \ The operand in this instruction is modified to the
+                        \ string length by the code at the start of the routine
+                        \
+                        \ So this sets A to the length of the species string
+
+ CMP #LL+2              \ If the species string is too long to fit within the
+ BCS spec1              \ line length in LL (including the carriage return at
+                        \ the end), skip the following instruction, so we drop
+                        \ the blank line after the population line and can
+                        \ spread the species over two lines
+
+ JSR TT67               \ Print a newline
+
+.spec1
+
+                        \ We now print the species as justified text, so long
+                        \ species strings will automatically be split over two
+                        \ lines
+
+ JSR MT14               \ Call MT14 to switch to justified text
+
+ LDA #1                 \ Move the text cursor to column 1 (so short species
+ STA XC                 \ strings still do a carriage return)
+
+ JSR spec2              \ Print the species string in brackets as justified
+                        \ text
+
+ JSR MT15               \ Call MT15 to switch to left-aligned text when printing
+                        \ extended tokens, disabling the justify text setting we
+                        \ set above
+
+ JSR TT67               \ Print a newline to insert a blank line after the
+                        \ species
+
+ RTS                    \ Return from the subroutine
+
+                        \ --- End of added code ------------------------------->
 
 .tune_data1_start
 

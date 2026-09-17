@@ -39,7 +39,7 @@
 .currentTune
      0E18   01
 .InitialiseMusic
-     0E19   A2 0C      LDX #&0C
+     0E19   A2 3C      LDX #&3C
      0E1B   8E DB 1C   STX &1CDB
      0E1E   86 70      STX &70
      0E20   A2 12      LDX #&12
@@ -572,14 +572,38 @@
      1206   44 41 
      1208   44 42 
      120A   4B 42 
+.GetSpeciesSize
+     120C   A9 C0      LDA #&C0
+     120E   8D CF 1F   STA &1FCF
+     1211   A9 00      LDA #&00
+     1213   8D D0 1F   STA &1FD0
+     1216   20 26 26   JSR &2626
+     1219   AD D0 1F   LDA &1FD0
+     121C   48         PHA
+     121D   20 D5 3B   JSR &3BD5
+     1220   68         PLA
+     1221   60         RTS
+.PrintSpecies
+     1222   A9 00      LDA #&00
+     1224   C9 20      CMP #&20
+     1226   B0 03      BCS &122B
+     1228   20 8A 25   JSR &258A
+.spec1
+     122B   20 D2 3B   JSR &3BD2
+     122E   A9 01      LDA #&01
+     1230   85 2C      STA &2C
+     1232   20 26 26   JSR &2626
+     1235   20 D5 3B   JSR &3BD5
+     1238   20 8A 25   JSR &258A
+     123B   60         RTS
 .tune_data1_start
-     120C   01 00 74 ... INCBIN "music/00_Elite_Theme.huf"
+     123C   01 00 74 ... INCBIN "music/00_Elite_Theme.huf"
 .tune_data1_end
 Tune 1  size is 1999 bytes
 .end
-Total size is 3035 bytes
+Total size is 3083 bytes
 
-Code ends at &19DB 
+Code ends at &1A0B 
 Saving file 'output/ssd/MUSIC1'
 .zp_start
 .huffmunch_zpblock
@@ -622,7 +646,7 @@ Saving file 'output/ssd/MUSIC1'
 .currentTune
      0E18   02
 .InitialiseMusic
-     0E19   A2 0C      LDX #&0C
+     0E19   A2 3C      LDX #&3C
      0E1B   8E DB 1C   STX &1CDB
      0E1E   86 70      STX &70
      0E20   A2 12      LDX #&12
@@ -1155,12 +1179,36 @@ Saving file 'output/ssd/MUSIC1'
      1206   44 41 
      1208   44 42 
      120A   4B 42 
+.GetSpeciesSize
+     120C   A9 C0      LDA #&C0
+     120E   8D CF 1F   STA &1FCF
+     1211   A9 00      LDA #&00
+     1213   8D D0 1F   STA &1FD0
+     1216   20 26 26   JSR &2626
+     1219   AD D0 1F   LDA &1FD0
+     121C   48         PHA
+     121D   20 D5 3B   JSR &3BD5
+     1220   68         PLA
+     1221   60         RTS
+.PrintSpecies
+     1222   A9 00      LDA #&00
+     1224   C9 20      CMP #&20
+     1226   B0 03      BCS &122B
+     1228   20 8A 25   JSR &258A
+.spec1
+     122B   20 D2 3B   JSR &3BD2
+     122E   A9 01      LDA #&01
+     1230   85 2C      STA &2C
+     1232   20 26 26   JSR &2626
+     1235   20 D5 3B   JSR &3BD5
+     1238   20 8A 25   JSR &258A
+     123B   60         RTS
 .tune_data1_start
-     120C   01 00 B2 ... INCBIN "music/01_Blue_Danube.huf"
+     123C   01 00 B2 ... INCBIN "music/01_Blue_Danube.huf"
 .tune_data1_end
 Tune 2  size is 2595 bytes
 .end
-Total size is 3631 bytes
+Total size is 3679 bytes
 
-Code ends at &1C2F 
+Code ends at &1C5F 
 Saving file 'output/ssd/MUSIC2'
