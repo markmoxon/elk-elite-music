@@ -1,7 +1,7 @@
-OSBYTE                  = $FFF4 
-OSCLI                   = $FFF7
-SHEILA_COUNTER          = $FE06
-SHEILA_MISC_CONTROL     = $FE07
+OSBYTE                  = &FFF4 
+OSCLI                   = &FFF7
+SHEILA_COUNTER          = &FE06
+SHEILA_MISC_CONTROL     = &FE07
 
 LL = 30                 \ Must match Electron Elite
 XC = &002C
@@ -19,11 +19,12 @@ TT26 = &1FD8
 BELL = &209D
 DELAY = &2505
 TT67 = &258A
-spec2 = &2626
-EnablePlus1 = &3581
-MT14 = &3BD2
-MT15 = &3BD5
-KL = &4C8A
+spec2 = &2625
+spec3 = &2670
+EnablePlus1 = &3597
+MT14 = &3BD1
+MT15 = &3BD4
+KL = &4CA0
 VIEW = &8617
 
 func1 = &B0
@@ -800,11 +801,6 @@ GUARD &1CD0             \ Don't overwrite the music variable space
 
 .PrintSpecies
 
- LDA #0                 \ The operand in this instruction is modified to the
-                        \ string length by the code at the start of the routine
-                        \
-                        \ So this sets A to the length of the species string
-
  CMP #LL+2              \ If the species string is too long to fit within the
  BCS spec1              \ line length in LL (including the carriage return at
                         \ the end), skip the following instruction, so we drop
@@ -834,7 +830,7 @@ GUARD &1CD0             \ Don't overwrite the music variable space
  JSR TT67               \ Print a newline to insert a blank line after the
                         \ species
 
- RTS                    \ Return from the subroutine
+ JMP spec3              \ Jump to spec3 to print the rest of the system data
 
                         \ --- End of added code ------------------------------->
 

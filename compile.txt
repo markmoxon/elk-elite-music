@@ -505,7 +505,7 @@
      1188   C0 09      CPY #&09
      118A   F0 0F      BEQ &119B
      118C   A9 FF      LDA #&FF
-     118E   99 8A 4C   STA &4C8A,Y
+     118E   99 A0 4C   STA &4CA0,Y
      1191   60         RTS
 .b_front
      1192   AE 17 86   LDX &8617
@@ -518,7 +518,7 @@
      11A0   F0 CB      BEQ &116D
      11A2   A2 B1      LDX #&B1
 .b_return
-     11A4   8E 8A 4C   STX &4C8A
+     11A4   8E A0 4C   STX &4CA0
      11A7   60         RTS
 .joys2
      11A8   BD DF 1C   LDA &1CDF,X
@@ -540,7 +540,7 @@
      11CD   60         RTS
 .joys4
      11CE   8C FF 11   STY &11FF
-     11D1   20 81 35   JSR &3581
+     11D1   20 97 35   JSR &3597
 .joys5
      11D4   20 DA 11   JSR &11DA
      11D7   A4 D1      LDY &D1
@@ -577,25 +577,24 @@
      120E   8D CF 1F   STA &1FCF
      1211   A9 00      LDA #&00
      1213   8D D0 1F   STA &1FD0
-     1216   20 26 26   JSR &2626
+     1216   20 25 26   JSR &2625
      1219   AD D0 1F   LDA &1FD0
      121C   48         PHA
-     121D   20 D5 3B   JSR &3BD5
+     121D   20 D4 3B   JSR &3BD4
      1220   68         PLA
      1221   60         RTS
 .PrintSpecies
-     1222   A9 00      LDA #&00
-     1224   C9 20      CMP #&20
-     1226   B0 03      BCS &122B
-     1228   20 8A 25   JSR &258A
+     1222   C9 20      CMP #&20
+     1224   B0 03      BCS &1229
+     1226   20 8A 25   JSR &258A
 .spec1
-     122B   20 D2 3B   JSR &3BD2
-     122E   A9 01      LDA #&01
-     1230   85 2C      STA &2C
-     1232   20 26 26   JSR &2626
-     1235   20 D5 3B   JSR &3BD5
-     1238   20 8A 25   JSR &258A
-     123B   60         RTS
+     1229   20 D1 3B   JSR &3BD1
+     122C   A9 01      LDA #&01
+     122E   85 2C      STA &2C
+     1230   20 25 26   JSR &2625
+     1233   20 D4 3B   JSR &3BD4
+     1236   20 8A 25   JSR &258A
+     1239   4C 70 26   JMP &2670
 .tune_data1_start
      123C   01 00 74 ... INCBIN "music/00_Elite_Theme.huf"
 .tune_data1_end
@@ -1112,7 +1111,7 @@ Saving file 'output/ssd/MUSIC1'
      1188   C0 09      CPY #&09
      118A   F0 0F      BEQ &119B
      118C   A9 FF      LDA #&FF
-     118E   99 8A 4C   STA &4C8A,Y
+     118E   99 A0 4C   STA &4CA0,Y
      1191   60         RTS
 .b_front
      1192   AE 17 86   LDX &8617
@@ -1125,7 +1124,7 @@ Saving file 'output/ssd/MUSIC1'
      11A0   F0 CB      BEQ &116D
      11A2   A2 B1      LDX #&B1
 .b_return
-     11A4   8E 8A 4C   STX &4C8A
+     11A4   8E A0 4C   STX &4CA0
      11A7   60         RTS
 .joys2
      11A8   BD DF 1C   LDA &1CDF,X
@@ -1147,7 +1146,7 @@ Saving file 'output/ssd/MUSIC1'
      11CD   60         RTS
 .joys4
      11CE   8C FF 11   STY &11FF
-     11D1   20 81 35   JSR &3581
+     11D1   20 97 35   JSR &3597
 .joys5
      11D4   20 DA 11   JSR &11DA
      11D7   A4 D1      LDY &D1
@@ -1184,25 +1183,24 @@ Saving file 'output/ssd/MUSIC1'
      120E   8D CF 1F   STA &1FCF
      1211   A9 00      LDA #&00
      1213   8D D0 1F   STA &1FD0
-     1216   20 26 26   JSR &2626
+     1216   20 25 26   JSR &2625
      1219   AD D0 1F   LDA &1FD0
      121C   48         PHA
-     121D   20 D5 3B   JSR &3BD5
+     121D   20 D4 3B   JSR &3BD4
      1220   68         PLA
      1221   60         RTS
 .PrintSpecies
-     1222   A9 00      LDA #&00
-     1224   C9 20      CMP #&20
-     1226   B0 03      BCS &122B
-     1228   20 8A 25   JSR &258A
+     1222   C9 20      CMP #&20
+     1224   B0 03      BCS &1229
+     1226   20 8A 25   JSR &258A
 .spec1
-     122B   20 D2 3B   JSR &3BD2
-     122E   A9 01      LDA #&01
-     1230   85 2C      STA &2C
-     1232   20 26 26   JSR &2626
-     1235   20 D5 3B   JSR &3BD5
-     1238   20 8A 25   JSR &258A
-     123B   60         RTS
+     1229   20 D1 3B   JSR &3BD1
+     122C   A9 01      LDA #&01
+     122E   85 2C      STA &2C
+     1230   20 25 26   JSR &2625
+     1233   20 D4 3B   JSR &3BD4
+     1236   20 8A 25   JSR &258A
+     1239   4C 70 26   JMP &2670
 .tune_data1_start
      123C   01 00 B2 ... INCBIN "music/01_Blue_Danube.huf"
 .tune_data1_end
